@@ -98,13 +98,17 @@ public class IsoGrid2D : MonoBehaviour
         }
     }
 
+
     public void ClearHighlight()
     {
         foreach (var tile in grid)
         {
-            tile.GetComponent<GameGrid>().ResetColor();
+            GameGrid gridComp = tile.GetComponent<GameGrid>();
+            gridComp.ResetColor();       // 恢复颜色
+            gridComp.isInRange = false;  // 重置可移动状态
         }
     }
+
     public List<GameGrid> FindPath(Vector2Int start, Vector2Int target)
     {
         GridNode startNode = nodes[start.x, start.y];
