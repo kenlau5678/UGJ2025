@@ -106,6 +106,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             yield return new WaitForEndOfFrame();
             wasDragged = false;
         }
+        //UseCard();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -186,5 +187,10 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     {
         if(cardVisual != null)
         Destroy(cardVisual.gameObject);
+    }
+
+    public void ExecuteEffect()
+    {
+        IsoGrid2D.instance.controller.GetComponent<UnitController>().Move();
     }
 }

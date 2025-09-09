@@ -65,9 +65,12 @@ public class CardVisual : MonoBehaviour
     private float curveRotationOffset;
     private Coroutine pressCoroutine;
 
+
+    private CanvasGroup canvasGroup;
     private void Start()
     {
         shadowDistance = visualShadow.localPosition;
+        canvasGroup = GetComponent<CanvasGroup>();
     }
 
     public void Initialize(Card target, int index = 0)
@@ -172,14 +175,16 @@ public class CardVisual : MonoBehaviour
     {
         if(scaleAnimations)
             transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
-
+        canvasGroup.alpha = Mathf.Clamp01(canvasGroup.alpha - 0.25f);
         canvas.overrideSorting = true;
+        
     }
 
     private void EndDrag(Card card)
     {
         canvas.overrideSorting = false;
         transform.DOScale(1, scaleTransition).SetEase(scaleEase);
+        canvasGroup.alpha = Mathf.Clamp01(canvasGroup.alpha + 0.25f);
     }
 
     private void PointerEnter(Card card)
