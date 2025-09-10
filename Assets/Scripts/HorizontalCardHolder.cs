@@ -172,7 +172,7 @@ public class HorizontalCardHolder : MonoBehaviour
         }
     }
 
-    private IEnumerator DrawNewCard()
+    public IEnumerator DrawNewCard()
     {
         GameObject newSlot = Instantiate(slotPrefab, transform);
         Card newCard = newSlot.GetComponentInChildren<Card>();
