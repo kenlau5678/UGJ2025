@@ -25,11 +25,21 @@ public class HorizontalCardHolder : MonoBehaviour
     bool isCrossing = false;
     [SerializeField] private bool tweenCardReturn = true;
 
+    [Header("Card Types")]
+    [SerializeField] private List<CardData> availableCardTypes;  // Assign in Inspector: Your deck of card prototypes.
     void Start()
     {
         for (int i = 0; i < cardsToSpawn; i++)
         {
-            Instantiate(slotPrefab, transform);
+            GameObject newSlot = Instantiate(slotPrefab, transform);
+            Card newCard = newSlot.GetComponentInChildren<Card>();
+            if (newCard != null)
+            {
+                // Assign a random CardData from availableCardTypes
+                CardData randomData = availableCardTypes[UnityEngine.Random.Range(0, availableCardTypes.Count)];
+                newCard.data = randomData;
+                newCard.name = randomData.cardName;  // Use card name for clarity
+            }
         }
 
         rect = GetComponent<RectTransform>();
@@ -174,25 +184,32 @@ public class HorizontalCardHolder : MonoBehaviour
 
     public IEnumerator DrawNewCard()
     {
+        if (availableCardTypes == null || availableCardTypes.Count == 0)
+        {
+            Debug.LogWarning("No card types available to draw!");
+            yield break;
+        }
+
         GameObject newSlot = Instantiate(slotPrefab, transform);
         Card newCard = newSlot.GetComponentInChildren<Card>();
 
         if (newCard != null)
         {
-            // Set up card events
+            // Assign a random card type (or cycle/index-based).
+            CardData randomData = availableCardTypes[UnityEngine.Random.Range(0, availableCardTypes.Count)];
+            newCard.data = randomData;
+            newCard.name = randomData.cardName;  // Use data name for clarity.
+
+            // Set up card events (keep as is)
             newCard.PointerEnterEvent.AddListener(CardPointerEnter);
             newCard.PointerExitEvent.AddListener(CardPointerExit);
             newCard.BeginDragEvent.AddListener(BeginDrag);
             newCard.EndDragEvent.AddListener(EndDrag);
-            newCard.name = cards.Count.ToString();
 
-
-
-            // Animation
+            // Animation (keep as is)
             Vector3 startPos = new Vector3(1000f, 0, 0);
             newSlot.transform.localPosition = startPos;
-            newSlot.transform.DOLocalMove(Vector3.zero, drawAnimationDuration)
-                .SetEase(Ease.OutBack);
+            newSlot.transform.DOLocalMove(Vector3.zero, drawAnimationDuration).SetEase(Ease.OutBack);
 
             // Update visual indexes
             yield return new WaitForSeconds(drawAnimationDuration);
@@ -213,8 +230,8 @@ public class HorizontalCardHolder : MonoBehaviour
     {
         if (card == null) return;
 
-        // 1. 执行卡牌效果（调用游戏逻辑）
-        card.ExecuteEffect(); // 可以在Card里写一个方法描述具体效果
+        // 1. 执行卡牌效果（现在在Card里处理，根据data）
+        card.ExecuteEffect();
 
         // 2. 播放使用动画
         //card.cardVisual.transform.DOPunchPosition(Vector3.up * 50, 0.3f, 10);
@@ -225,7 +242,8 @@ public class HorizontalCardHolder : MonoBehaviour
 
         // 4. 刷新其他卡牌的Visual索引
         foreach (var c in cards)
-            c.cardVisual.UpdateIndex(transform.childCount);
+            if (c.cardVisual != null)
+                c.cardVisual.UpdateIndex(transform.childCount);
 
         // 5. （可选）刷新布局
         LayoutRebuilder.ForceRebuildLayoutImmediate(rect);

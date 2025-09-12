@@ -10,6 +10,9 @@ public class GameGrid : MonoBehaviour
     public bool isInRange=false;
 
     public SpriteRenderer selectGrid;
+    public bool isAttackTarget = false;
+    public bool isOccupied = false;
+
     void Start()
     {
         rend = GetComponent<SpriteRenderer>();
@@ -47,10 +50,16 @@ public class GameGrid : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (isInRange)
+        UnitController player = FindObjectOfType<UnitController>();
+
+        if (isInRange) // ÒÆ¶¯
         {
-            UnitController player = FindObjectOfType<UnitController>();
             player.MoveToGrid(this);
+        }
+        else if (isAttackTarget) // ¹¥»÷
+        {
+            player.Attack(this);
+            IsoGrid2D.instance.ClearHighlight();
         }
     }
 

@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
 {
+    [Header("Data")]
+    public CardData data;  // Assigned when drawing the card.
+
     private Canvas canvas;
     private Image imageComponent;
     [SerializeField] private bool instantiateVisual = true;
@@ -46,11 +49,18 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         canvas = GetComponentInParent<Canvas>();
         imageComponent = GetComponent<Image>();
 
-        if (!instantiateVisual)
-            return;
+        if (data != null && data.cardSprite != null)
+        {
+            imageComponent.sprite = data.cardSprite;  // Set sprite based on type.
+        }
+
+        if (!instantiateVisual) return;
 
         visualHandler = FindObjectOfType<VisualCardsHandler>();
-        cardVisual = Instantiate(cardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CardVisual>();
+
+        // Use custom visual if defined in data, else fallback to default.
+        GameObject prefabToUse = (data != null && data.visualPrefab != null) ? data.visualPrefab : cardVisualPrefab;
+        cardVisual = Instantiate(prefabToUse, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CardVisual>();
         cardVisual.Initialize(this);
     }
 
@@ -189,8 +199,36 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
         Destroy(cardVisual.gameObject);
     }
 
+    //public abstract void ExecuteEffect();
+
+
     public void ExecuteEffect()
     {
-        IsoGrid2D.instance.controller.GetComponent<UnitController>().Move();
+        if (data == null) return;
+
+        // Example: Handle based on enum.
+        switch (data.effectType)
+        {
+            case CardData.CardEffectType.MoveUnit:
+                IsoGrid2D.instance.controller.GetComponent<UnitController>().Move();
+                break;
+            case CardData.CardEffectType.Attack:
+
+                IsoGrid2D.instance.HighlightAttackRange(IsoGrid2D.instance.controller.GetComponent<UnitController>().currentGridPos, IsoGrid2D.instance.controller.GetComponent<UnitController>().attackRange);
+
+                // Example: Implement attack logic here (e.g., damage enemies).
+                //Debug.Log($"Executing Attack: Deal {data.manaCost * 2} damage!");  // Placeholder.
+                break;
+            case CardData.CardEffectType.Heal:
+                // Example: Heal logic.
+                Debug.Log($"Executing Heal: Restore {data.manaCost * 3} health!");
+                break;
+            default:
+                Debug.LogWarning("No effect defined for this card type.");
+                break;
+        }
+
+        // If using delegate for complex effects.
+        data.ExecuteCustomEffect?.Invoke();
     }
 }

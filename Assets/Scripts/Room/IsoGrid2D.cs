@@ -76,27 +76,46 @@ public class IsoGrid2D : MonoBehaviour
 
     public void HighlightMoveRange(Vector2Int playerPos, int moveRange)
     {
-        // 先把所有格子恢复原色，并清空 isInRange
         ClearHighlight();
 
-        for (int y = 0; y < height; y++)
+        Queue<(Vector2Int pos, int step)> queue = new Queue<(Vector2Int, int)>();
+        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+
+        queue.Enqueue((playerPos, 0));
+        visited.Add(playerPos);
+
+        while (queue.Count > 0)
         {
-            for (int x = 0; x < width; x++)
+            var (pos, step) = queue.Dequeue();
+            GameGrid gridComp = GetTile(pos.x, pos.y).GetComponent<GameGrid>();
+
+            // 标记为可移动
+            if (step > 0) // step=0 是玩家自己所在格子，可以选择不高亮
             {
-                int distance = Mathf.Abs(x - playerPos.x) + Mathf.Abs(y - playerPos.y); // 曼哈顿距离
-                if (distance <= moveRange)
-                {
-                    GameObject tile = GetTile(x, y);
-                    if (tile != null)
-                    {
-                        GameGrid gridComp = tile.GetComponent<GameGrid>();
-                        gridComp.SetColor(gridComp.moveRangeColor);
-                        gridComp.isInRange = true; // 设置为可移动
-                    }
-                }
+                gridComp.SetColor(gridComp.moveRangeColor);
+                gridComp.isInRange = true;
+            }
+
+            if (step >= moveRange) continue;
+
+            // 四个方向
+            Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+            foreach (var dir in directions)
+            {
+                Vector2Int newPos = pos + dir;
+                if (newPos.x < 0 || newPos.x >= width || newPos.y < 0 || newPos.y >= height) continue;
+                if (visited.Contains(newPos)) continue;
+
+                GameGrid neighbor = GetTile(newPos.x, newPos.y).GetComponent<GameGrid>();
+                if (neighbor.isOccupied) continue; // 被占用格子不能移动
+
+                queue.Enqueue((newPos, step + 1));
+                visited.Add(newPos);
             }
         }
     }
+
+
 
 
     public void ClearHighlight()
@@ -105,7 +124,8 @@ public class IsoGrid2D : MonoBehaviour
         {
             GameGrid gridComp = tile.GetComponent<GameGrid>();
             gridComp.ResetColor();       // 恢复颜色
-            gridComp.isInRange = false;  // 重置可移动状态
+            gridComp.isInRange = false;
+            gridComp.isAttackTarget = false;
         }
     }
 
@@ -141,7 +161,12 @@ public class IsoGrid2D : MonoBehaviour
 
             foreach (GridNode neighbor in GetNeighbors(currentNode))
             {
-                if (!neighbor.walkable || closedList.Contains(neighbor)) continue;
+                // 如果该格子被占用，不能走
+                if (neighbor.grid.isOccupied && neighbor != targetNode)
+                    continue;
+
+                if (!neighbor.walkable || closedList.Contains(neighbor))
+                    continue;
 
                 int newGCost = currentNode.gCost + GetDistance(currentNode, neighbor);
                 if (newGCost < neighbor.gCost || !openList.Contains(neighbor))
@@ -150,9 +175,11 @@ public class IsoGrid2D : MonoBehaviour
                     neighbor.hCost = GetDistance(neighbor, targetNode);
                     neighbor.parent = currentNode;
 
-                    if (!openList.Contains(neighbor)) openList.Add(neighbor);
+                    if (!openList.Contains(neighbor))
+                        openList.Add(neighbor);
                 }
             }
+
         }
 
         return null; // 没有路径
@@ -195,5 +222,39 @@ public class IsoGrid2D : MonoBehaviour
     {
         return Mathf.Abs(a.position.x - b.position.x) + Mathf.Abs(a.position.y - b.position.y);
     }
+
+    public void HighlightAttackRange(Vector2Int playerPos, int attackRange)
+    {
+        Debug.Log(1);
+        ClearHighlight();
+
+        // 四个方向
+        Vector2Int[] directions = {
+        new Vector2Int(0,1),
+        new Vector2Int(1,0),
+        new Vector2Int(0,-1),
+        new Vector2Int(-1,0)
+    };
+
+        foreach (var dir in directions)
+        {
+            Vector2Int targetPos = playerPos + dir * attackRange;
+            GameObject tile = GetTile(targetPos.x, targetPos.y);
+            if (tile != null)
+            {
+                Debug.Log(2);
+                EnemyUnit enemy = tile.GetComponentInChildren<EnemyUnit>();
+                if (enemy != null) //如果该格子有敌人
+                {
+                    Debug.Log(3);
+                    GameGrid gridComp = tile.GetComponent<GameGrid>();
+                    gridComp.SetColor(Color.red); // 高亮为红色
+                    //gridComp.isInRange = true;    // 作为攻击目标
+                    gridComp.isAttackTarget = true;
+                }
+            }
+        }
+    }
+
 
 }
