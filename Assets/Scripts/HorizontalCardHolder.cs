@@ -27,47 +27,71 @@ public class HorizontalCardHolder : MonoBehaviour
 
     [Header("Card Types")]
     [SerializeField] private List<CardData> availableCardTypes;  // Assign in Inspector: Your deck of card prototypes.
+    [Header("起始手牌数量")]
+    [SerializeField] private int startingHandSize = 5;
+
     void Start()
     {
-        for (int i = 0; i < cardsToSpawn; i++)
-        {
-            GameObject newSlot = Instantiate(slotPrefab, transform);
-            Card newCard = newSlot.GetComponentInChildren<Card>();
-            if (newCard != null)
-            {
-                // Assign a random CardData from availableCardTypes
-                CardData randomData = availableCardTypes[UnityEngine.Random.Range(0, availableCardTypes.Count)];
-                newCard.data = randomData;
-                newCard.name = randomData.cardName;  // Use card name for clarity
-            }
-        }
-
+        DeckManager.instance.Shuffle(DeckManager.instance.deck);
         rect = GetComponent<RectTransform>();
-        cards = GetComponentsInChildren<Card>().ToList();
-
-        int cardCount = 0;
-
-        foreach (Card card in cards)
+        cards = new List<Card>();
+        
+        // 起始抽牌
+        for (int i = 0; i < startingHandSize; i++)
         {
-            card.PointerEnterEvent.AddListener(CardPointerEnter);
-            card.PointerExitEvent.AddListener(CardPointerExit);
-            card.BeginDragEvent.AddListener(BeginDrag);
-            card.EndDragEvent.AddListener(EndDrag);
-            card.name = cardCount.ToString();
-            cardCount++;
+            DrawNewCardImmediate();
         }
+    }
 
-        StartCoroutine(Frame());
+    public void DrawNewCardImmediate()
+    {
+        CardData data = DeckManager.instance.DrawCard();
+        if (data == null) return;
 
-        IEnumerator Frame()
-        {
-            yield return new WaitForSecondsRealtime(.1f);
-            for (int i = 0; i < cards.Count; i++)
-            {
-                if (cards[i].cardVisual != null)
-                    cards[i].cardVisual.UpdateIndex(transform.childCount);
-            }
+        GameObject newSlot = Instantiate(slotPrefab, transform);
+        Card newCard = newSlot.GetComponentInChildren<Card>();
+        newCard.data = data;
+        newCard.name = data.cardName;
+
+        // 绑定事件
+        newCard.PointerEnterEvent.AddListener(CardPointerEnter);
+        newCard.PointerExitEvent.AddListener(CardPointerExit);
+        newCard.BeginDragEvent.AddListener(BeginDrag);
+        newCard.EndDragEvent.AddListener(EndDrag);
+
+        cards.Add(newCard);
+    }
+
+    public IEnumerator DrawNewCard()
+    {
+        CardData data = DeckManager.instance.DrawCard();
+        if (data == null) yield break;
+
+        GameObject newSlot = Instantiate(slotPrefab, transform);
+        Card newCard = newSlot.GetComponentInChildren<Card>();
+        newCard.data = data;
+        newCard.name = data.cardName;
+
+        // 绑定事件
+        newCard.PointerEnterEvent.AddListener(CardPointerEnter);
+        newCard.PointerExitEvent.AddListener(CardPointerExit);
+        newCard.BeginDragEvent.AddListener(BeginDrag);
+        newCard.EndDragEvent.AddListener(EndDrag);
+
+        // 动画
+        Vector3 startPos = new Vector3(1000f, 0, 0);
+        newSlot.transform.localPosition = startPos;
+        newSlot.transform.DOLocalMove(Vector3.zero, drawAnimationDuration).SetEase(Ease.OutBack);
+
+        yield return new WaitForSeconds(drawAnimationDuration);
+        // 强制刷新布局
+        LayoutRebuilder.ForceRebuildLayoutImmediate(rect); 
+        foreach (Card card in cards) 
+        { 
+            if (card.cardVisual != null) 
+                card.cardVisual.UpdateIndex(transform.childCount); 
         }
+        cards.Add(newCard);
     }
 
     private void BeginDrag(Card card)
@@ -182,71 +206,33 @@ public class HorizontalCardHolder : MonoBehaviour
         }
     }
 
-    public IEnumerator DrawNewCard()
-    {
-        if (availableCardTypes == null || availableCardTypes.Count == 0)
-        {
-            Debug.LogWarning("No card types available to draw!");
-            yield break;
-        }
 
-        GameObject newSlot = Instantiate(slotPrefab, transform);
-        Card newCard = newSlot.GetComponentInChildren<Card>();
-
-        if (newCard != null)
-        {
-            // Assign a random card type (or cycle/index-based).
-            CardData randomData = availableCardTypes[UnityEngine.Random.Range(0, availableCardTypes.Count)];
-            newCard.data = randomData;
-            newCard.name = randomData.cardName;  // Use data name for clarity.
-
-            // Set up card events (keep as is)
-            newCard.PointerEnterEvent.AddListener(CardPointerEnter);
-            newCard.PointerExitEvent.AddListener(CardPointerExit);
-            newCard.BeginDragEvent.AddListener(BeginDrag);
-            newCard.EndDragEvent.AddListener(EndDrag);
-
-            // Animation (keep as is)
-            Vector3 startPos = new Vector3(1000f, 0, 0);
-            newSlot.transform.localPosition = startPos;
-            newSlot.transform.DOLocalMove(Vector3.zero, drawAnimationDuration).SetEase(Ease.OutBack);
-
-            // Update visual indexes
-            yield return new WaitForSeconds(drawAnimationDuration);
-
-            // 强制刷新布局
-            LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
-            foreach (Card card in cards)
-            {
-                if (card.cardVisual != null)
-                    card.cardVisual.UpdateIndex(transform.childCount);
-            }
-
-            // Add to cards list
-            cards.Add(newCard);
-        }
-    }
     void UseCard(Card card)
     {
         if (card == null) return;
 
-        // 1. 执行卡牌效果（现在在Card里处理，根据data）
-        card.ExecuteEffect();
+        bool executed = card.ExecuteEffect();
+        if (!executed)
+        {
+            Debug.Log("卡牌未生效，不消耗。");
+            return;
+        }
 
-        // 2. 播放使用动画
-        //card.cardVisual.transform.DOPunchPosition(Vector3.up * 50, 0.3f, 10);
+        // 丢进弃牌堆
+        DeckManager.instance.Discard(card.data);
 
-        // 3. 从手牌中移除
+        // 移除手牌
         cards.Remove(card);
-        Destroy(card.transform.parent.gameObject); // 或 Destroy(card.gameObject) 视情况
+        Destroy(card.transform.parent.gameObject);
 
-        // 4. 刷新其他卡牌的Visual索引
+        // 更新显示
         foreach (var c in cards)
             if (c.cardVisual != null)
                 c.cardVisual.UpdateIndex(transform.childCount);
 
-        // 5. （可选）刷新布局
         LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
     }
+
+
 
 }

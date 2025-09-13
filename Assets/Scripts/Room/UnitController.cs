@@ -17,6 +17,9 @@ public class UnitController : MonoBehaviour
     public float attackDamage = 5f;
 
     public Vector2Int currentGridPos; // 玩家当前格子位置
+
+
+    public float shield = 0f;      // 护盾值
     private void Start()
     {
         if (IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y) != null)
@@ -30,6 +33,8 @@ public class UnitController : MonoBehaviour
 
         currentHealth = maxHealth;
         healthSystem.SetMaxHealth(maxHealth);
+        healthSystem.SetMaxShield(10f);
+        healthSystem.SetShield(shield);
     }
 
     private void Update()
@@ -101,14 +106,54 @@ public class UnitController : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        currentHealth -= amount;
-        healthSystem.SetHealth(currentHealth);
-        if (currentHealth <= 0)
+
+        if (shield > 0)
         {
-            currentHealth = 0;
-            Debug.Log("Player is dead!");
-            // TODO: 这里可以触发游戏失败逻辑
+            if (shield >= amount)
+            {
+                shield -= amount;
+                amount = 0f;
+            }
+            else
+            {
+                amount -= shield;
+                shield = 0f;
+            }
+
+            // 更新护盾条显示当前值
+            healthSystem.SetShield(shield);
         }
+
+        // 剩余伤害扣血
+        if (amount > 0)
+        {
+            currentHealth -= amount;
+            healthSystem.SetHealth(currentHealth);
+
+            if (currentHealth <= 0)
+            {
+                currentHealth = 0;
+                Debug.Log("Player is dead!");
+                // TODO: 游戏失败逻辑
+            }
+        }
+    }
+
+    public void AddShield(float amount)
+    {
+        shield += amount;
+        Debug.Log($"玩家获得护盾 {amount}，当前护盾值: {shield}");
+        healthSystem.SetShield(shield);
+    }
+
+    public void Heal(float health)
+    {
+        currentHealth += health;
+        if(currentHealth>=maxHealth)
+        {
+            currentHealth=maxHealth;
+        }
+        healthSystem.SetHealth(currentHealth);
     }
     public void Attack(GameGrid targetGrid)
     {

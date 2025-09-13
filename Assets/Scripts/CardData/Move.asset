@@ -10,11 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 071c0a67929233046a864cffac2c1e00, type: 3}
-  m_Name: Heal
+  m_Name: Move
   m_EditorClassIdentifier: 
-  cardName: Heal
-  description: Heal
+  cardName: Move
+  description: Move
   cardSprite: {fileID: 0}
-  visualPrefab: {fileID: 7310339964073049012, guid: bddd0263814164da396aa8d1438dd810, type: 3}
+  visualPrefab: {fileID: 7310339964073049012, guid: 64689a80f0a1f7248a38e99fd55f617c, type: 3}
   manaCost: 0
-  effectType: 2
+  effectType: 0
+  amount: 0
+  attackRange: 0
+  attackAttribute: 0

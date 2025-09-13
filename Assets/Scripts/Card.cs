@@ -202,33 +202,80 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     //public abstract void ExecuteEffect();
 
 
-    public void ExecuteEffect()
+    // 返回是否成功执行
+    public bool ExecuteEffect()
     {
-        if (data == null) return;
+        if (data == null) return false;
 
-        // Example: Handle based on enum.
+        bool effectExecuted = false;
+        UnitController playerUnit = IsoGrid2D.instance.controller.GetComponent<UnitController>();
+
         switch (data.effectType)
         {
             case CardData.CardEffectType.MoveUnit:
-                IsoGrid2D.instance.controller.GetComponent<UnitController>().Move();
+                playerUnit.Move();
+                effectExecuted = true;
                 break;
+
             case CardData.CardEffectType.Attack:
+                {
+                    // 使用卡牌的攻击范围（如果想让卡牌控制范围，可以加 attackRange 字段）
+                    bool hasTarget = IsoGrid2D.instance.HighlightAttackRange(
+                        playerUnit.currentGridPos,
+                        1 // 近战固定 1 格，或者可以改成 data.attackRange
+                    );
 
-                IsoGrid2D.instance.HighlightAttackRange(IsoGrid2D.instance.controller.GetComponent<UnitController>().currentGridPos, IsoGrid2D.instance.controller.GetComponent<UnitController>().attackRange);
-
-                // Example: Implement attack logic here (e.g., damage enemies).
-                //Debug.Log($"Executing Attack: Deal {data.manaCost * 2} damage!");  // Placeholder.
+                    if (hasTarget)
+                    {
+                        // TODO: 在 HighlightAttackRange 里找到目标后，对敌人调用 TakeDamage(data.amount)
+                        playerUnit.attackDamage = data.amount;
+                        effectExecuted = true;
+                        Debug.Log($"近战攻击，造成 {data.amount} 点伤害！");
+                    }
+                }
                 break;
+
+            case CardData.CardEffectType.RangedAttack:
+                {
+                    bool hasRangedTarget = IsoGrid2D.instance.HighlightRangedAttackRange(
+                        playerUnit.currentGridPos,
+                        data.attackRange // 使用卡牌的远程范围
+                    );
+
+                    if (hasRangedTarget)
+                    {
+                        // TODO: 在 HighlightRangedAttackRange 里找到目标后，对敌人调用 TakeDamage(data.amount)
+                        playerUnit.attackDamage = data.amount;
+                        effectExecuted = true;
+                        Debug.Log($"远程攻击（{data.attackAttribute}），造成 {data.amount} 点伤害！");
+                    }
+                }
+                break;
+
             case CardData.CardEffectType.Heal:
-                // Example: Heal logic.
-                Debug.Log($"Executing Heal: Restore {data.manaCost * 3} health!");
+                if(playerUnit.currentHealth < playerUnit.maxHealth)
+                {
+                    playerUnit.Heal(data.amount); // 使用卡牌定义的治疗数值
+                    effectExecuted = true;
+                    Debug.Log($"治疗 {data.amount} 点生命值！");
+                }
+
+                break;
+
+            case CardData.CardEffectType.Shield:
+                
+                playerUnit.AddShield(data.amount); // 使用卡牌定义的治疗数值
+                effectExecuted = true;
+                Debug.Log($"获得 {data.amount} 点护盾！");
                 break;
             default:
                 Debug.LogWarning("No effect defined for this card type.");
                 break;
         }
 
-        // If using delegate for complex effects.
         data.ExecuteCustomEffect?.Invoke();
+
+        return effectExecuted;
     }
+
 }

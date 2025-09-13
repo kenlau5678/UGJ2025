@@ -223,17 +223,14 @@ public class IsoGrid2D : MonoBehaviour
         return Mathf.Abs(a.position.x - b.position.x) + Mathf.Abs(a.position.y - b.position.y);
     }
 
-    public void HighlightAttackRange(Vector2Int playerPos, int attackRange)
+    public bool HighlightAttackRange(Vector2Int playerPos, int attackRange)
     {
-        Debug.Log(1);
         ClearHighlight();
 
-        // 四个方向
+        bool foundTarget = false;
+
         Vector2Int[] directions = {
-        new Vector2Int(0,1),
-        new Vector2Int(1,0),
-        new Vector2Int(0,-1),
-        new Vector2Int(-1,0)
+        Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right
     };
 
         foreach (var dir in directions)
@@ -242,19 +239,73 @@ public class IsoGrid2D : MonoBehaviour
             GameObject tile = GetTile(targetPos.x, targetPos.y);
             if (tile != null)
             {
-                Debug.Log(2);
                 EnemyUnit enemy = tile.GetComponentInChildren<EnemyUnit>();
-                if (enemy != null) //如果该格子有敌人
+                if (enemy != null) // 如果该格子有敌人
                 {
-                    Debug.Log(3);
                     GameGrid gridComp = tile.GetComponent<GameGrid>();
                     gridComp.SetColor(Color.red); // 高亮为红色
-                    //gridComp.isInRange = true;    // 作为攻击目标
                     gridComp.isAttackTarget = true;
+                    foundTarget = true;
                 }
             }
         }
+
+        return foundTarget;
     }
 
+    public bool HighlightRangedAttackRange(Vector2Int playerPos, int attackRange)
+    {
+        ClearHighlight();
+
+        bool foundTarget = false;
+        List<GameGrid> targets = new List<GameGrid>();
+
+        for (int dx = -attackRange; dx <= attackRange; dx++)
+        {
+            for (int dy = -attackRange; dy <= attackRange; dy++)
+            {
+                Vector2Int targetPos = new Vector2Int(playerPos.x + dx, playerPos.y + dy);
+
+                // 曼哈顿距离（菱形范围）
+                int distance = Mathf.Abs(dx) + Mathf.Abs(dy);
+                if (distance == 0 || distance > attackRange)
+                    continue; // 跳过自己和超出范围的格子
+
+                GameObject tile = GetTile(targetPos.x, targetPos.y);
+                if (tile != null)
+                {
+                    EnemyUnit enemy = tile.GetComponentInChildren<EnemyUnit>();
+                    if (enemy != null) // 如果该格子有敌人
+                    {
+                        GameGrid gridComp = tile.GetComponent<GameGrid>();
+                        targets.Add(gridComp);
+                        foundTarget = true;
+                    }
+                    else
+                    {
+                        // 可选：把攻击范围格子显示成其他颜色
+                        GameGrid gridComp = tile.GetComponent<GameGrid>();
+                        gridComp.SetColor(new Color(1f, 0.5f, 0.5f, 0.3f)); // 半透明粉色
+                    }
+                }
+            }
+        }
+
+        // 只有找到敌人时才高亮
+        if (foundTarget)
+        {
+            foreach (var gridComp in targets)
+            {
+                gridComp.SetColor(Color.magenta); // 高亮敌人
+                gridComp.isAttackTarget = true;
+            }
+        }
+        else
+        {
+            ClearHighlight(); // 确保没东西亮着
+        }
+
+        return foundTarget;
+    }
 
 }

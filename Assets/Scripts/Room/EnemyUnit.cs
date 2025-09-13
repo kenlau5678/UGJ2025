@@ -22,6 +22,7 @@ public class EnemyUnit : MonoBehaviour
         if (IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y) != null)
         {
             startGrid = IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y);
+            startGrid.GetComponent<GameGrid>().isOccupied = true;
             transform.SetParent(startGrid.transform);
             transform.localPosition = Vector3.zero;
         }
@@ -53,19 +54,31 @@ public class EnemyUnit : MonoBehaviour
         if (playerGrid != null)
         {
             List<GameGrid> path = IsoGrid2D.instance.FindPath(startPoint, playerPos);
-            if (path != null && path.Count > 0)
-            {
-                // 如果路径长度超过可移动范围，只走 moveRange 步
-                Debug.Log(path.Count);
-                Debug.Log(moveRange);
-                int steps = Mathf.Min(moveRange, path.Count-1); // -1 避免走到玩家所在格子（可以根据需求保留）
-                List<GameGrid> limitedPath = path.GetRange(0, steps);
 
-                StopAllCoroutines();
-                StartCoroutine(FollowPath(limitedPath));
+            if (path == null || path.Count == 0)
+                return;
+
+            // --- 如果路径只有1（说明敌人就在原地） ---
+            if (path.Count == 1)
+            {
+                // 判断是否可以攻击玩家
+                int dist = Mathf.Abs(playerPos.x - startPoint.x) + Mathf.Abs(playerPos.y - startPoint.y);
+                if (dist == 1) // 玩家相邻
+                {
+                    AttackPlayer();
+                }
+                return; // 不移动，直接结束
             }
+
+            // --- 正常移动逻辑 ---
+            int steps = Mathf.Min(moveRange, path.Count - 1);
+            List<GameGrid> limitedPath = path.GetRange(0, steps);
+
+            StopAllCoroutines();
+            StartCoroutine(FollowPath(limitedPath));
         }
     }
+
 
 
     public void Move()
