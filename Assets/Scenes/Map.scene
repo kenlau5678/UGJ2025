@@ -264,6 +264,69 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &306374773
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 306374775}
+  - component: {fileID: 306374774}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: DeckManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &306374774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306374773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35c2d4e6f60b47f4a964b0ac904f4292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialDeck:
+  - {fileID: 11400000, guid: fb9f9b6cd3e920d4fbd38780eb8722d0, type: 2}
+  - {fileID: 11400000, guid: fb9f9b6cd3e920d4fbd38780eb8722d0, type: 2}
+  - {fileID: 11400000, guid: fb9f9b6cd3e920d4fbd38780eb8722d0, type: 2}
+  - {fileID: 11400000, guid: fb9f9b6cd3e920d4fbd38780eb8722d0, type: 2}
+  - {fileID: 11400000, guid: fb9f9b6cd3e920d4fbd38780eb8722d0, type: 2}
+  - {fileID: 11400000, guid: b4a6131816bcd4d4b8e4e905b3c06fce, type: 2}
+  - {fileID: 11400000, guid: b4a6131816bcd4d4b8e4e905b3c06fce, type: 2}
+  - {fileID: 11400000, guid: b4a6131816bcd4d4b8e4e905b3c06fce, type: 2}
+  - {fileID: 11400000, guid: b4a6131816bcd4d4b8e4e905b3c06fce, type: 2}
+  - {fileID: 11400000, guid: b4a6131816bcd4d4b8e4e905b3c06fce, type: 2}
+  - {fileID: 11400000, guid: 0b71df51405c4ae48ac53ab3cba488a1, type: 2}
+  - {fileID: 11400000, guid: 0b71df51405c4ae48ac53ab3cba488a1, type: 2}
+  - {fileID: 11400000, guid: 0b71df51405c4ae48ac53ab3cba488a1, type: 2}
+  - {fileID: 11400000, guid: 872851f17754d0646944ad83cb0e558a, type: 2}
+  - {fileID: 11400000, guid: 872851f17754d0646944ad83cb0e558a, type: 2}
+  - {fileID: 11400000, guid: 872851f17754d0646944ad83cb0e558a, type: 2}
+  deck: []
+--- !u!4 &306374775
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306374773}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 31.105486, y: 21.58076, z: 2.2555108}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &571589267
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,6 +532,52 @@ Transform:
   m_Children:
   - {fileID: 1000900331}
   - {fileID: 1537736465}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &842849660
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 842849662}
+  - component: {fileID: 842849661}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: CollectionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &842849661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842849660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f27cf2fd2e8b19478ee596d8cd40900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coins: 0
+--- !u!4 &842849662
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842849660}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 26.862427, y: 24.707148, z: -0.08955973}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1000900330
@@ -825,3 +934,5 @@ SceneRoots:
   - {fileID: 767288128}
   - {fileID: 1983083257}
   - {fileID: 571589270}
+  - {fileID: 842849662}
+  - {fileID: 306374775}

@@ -13,8 +13,15 @@ public class DeckManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null) instance = this;
-        else Destroy(gameObject);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
         // 初始化牌组和弃牌堆
         deck = new List<CardData>(initialDeck);

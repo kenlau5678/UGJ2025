@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class PlayerInMap : MonoBehaviour
 {
     private MapGridManager mapManager;
-    private MapGrid currentGrid;
+    public MapGrid currentGrid;
     private List<MapGrid> highlightedGrids = new List<MapGrid>();
 
     void Start()
@@ -149,6 +149,11 @@ public class PlayerInMap : MonoBehaviour
             SetUpperGridsGray();
             HighlightNeighbors();
             ResetFarGrids(); // 保证远离玩家的格子恢复白色
+
+            if(targetGrid.type == 2)
+            {
+                SceneManager.LoadScene("Store");
+            }
         }
     }
 

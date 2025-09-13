@@ -50,6 +50,7 @@ public class GameGrid : MonoBehaviour
 
     void OnMouseDown()
     {
+
         UnitController player = FindObjectOfType<UnitController>();
 
         if (isInRange) // ÒÆ¶¯

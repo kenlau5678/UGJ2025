@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapGrid : MonoBehaviour
 {
@@ -63,5 +64,9 @@ public class MapGrid : MonoBehaviour
             rend.color = Color.white;
     }
 }
+    void OnMouseDown()
+    {
+
+    }
 
 }
