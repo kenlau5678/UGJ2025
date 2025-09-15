@@ -1,6 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
+public class GridTypePrefab
+{
+    public int type;               // 格子类型，例如 1,2,3
+    public GameObject prefabs;   // 对应类型的Prefab数组，可在Inspector中随机选择
+}
 public class MapGridManager : MonoBehaviour
 {
     public TextAsset csvFile;
@@ -9,9 +14,12 @@ public class MapGridManager : MonoBehaviour
     public GameObject playerPrefab;   //新增：玩家预制体
     public float cellSize = 1f;
 
-    public GameObject[] grid1Prefabs; // 1类型格子随机选择的Prefab数组
+
+    
 
     public Dictionary<Vector2Int, GameObject> gridDict = new Dictionary<Vector2Int, GameObject>();
+
+    public GridTypePrefab[] grid1Prefabs; // 1类型格子随机选择的Prefab数组
     void Start()
     {
         if (csvFile == null)
@@ -50,9 +58,10 @@ public class MapGridManager : MonoBehaviour
                     if (grid1Prefabs.Length > 0)
                     {
                         int index = Random.Range(0, grid1Prefabs.Length);
-                        prefabToUse = grid1Prefabs[index];
+                        prefabToUse = grid1Prefabs[index].prefabs;
+                        type = grid1Prefabs[index].type;
                     }
-                    type = 1;
+                    
                 }
                 else if (values[x] == "2")
                 {

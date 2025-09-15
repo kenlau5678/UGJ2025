@@ -26,7 +26,7 @@ public class MapGrid : MonoBehaviour
         }
 
         if (icon != null)
-            if (type == 1) icon.enabled = false;
+            if (type != 2) icon.enabled = false;
     }
     // 玩家走过的格子 → 永远灰色
     public void SetVisited()

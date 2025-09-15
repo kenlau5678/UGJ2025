@@ -211,12 +211,24 @@ public class HorizontalCardHolder : MonoBehaviour
     {
         if (card == null) return;
 
+        // 检查行动点
+        if (TurnManager.instance.actionPoints <= 0)
+        {
+            Debug.Log("没有行动点，无法出牌！");
+            return;
+        }
+
         bool executed = card.ExecuteEffect();
         if (!executed)
         {
             Debug.Log("卡牌未生效，不消耗。");
             return;
         }
+
+        // 消耗行动点
+        TurnManager.instance.actionPoints--;
+        TurnManager.instance.actionPointText.text = "Action Point: " + TurnManager.instance.actionPoints;
+        Debug.Log($"使用卡牌：{card.data.cardName}，剩余行动点：{TurnManager.instance.actionPoints}");
 
         // 丢进弃牌堆
         DeckManager.instance.Discard(card.data);
@@ -232,6 +244,7 @@ public class HorizontalCardHolder : MonoBehaviour
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
     }
+
 
 
 

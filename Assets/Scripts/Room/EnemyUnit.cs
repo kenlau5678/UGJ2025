@@ -147,12 +147,12 @@ public class EnemyUnit : MonoBehaviour
 
     private void AttackPlayer()
     {
-        if (player == null) return;
+        if (player == null || currentHealth <= 0) return;
 
-        // ПлбЊ
         player.TakeDamage(attackDamage);
         Debug.Log("Enemy attacks player!");
     }
+
     public void TakeDamage(float amount)
     {
         currentHealth -= amount;

@@ -154,6 +154,10 @@ public class PlayerInMap : MonoBehaviour
             {
                 SceneManager.LoadScene("Store");
             }
+            if (targetGrid.type == 4)
+            {
+                SceneManager.LoadScene("RoomTest");
+            }
         }
     }
 
