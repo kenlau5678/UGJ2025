@@ -90,6 +90,7 @@ public class TurnManager : MonoBehaviour
         if (enemies.Length == 0)
         {
             Debug.Log("没有敌人了，返回地图场景");
+            CollectionManager.instance.AddCoin(5);
             SceneManager.LoadScene("Map");
             yield break; // 停止协程
         }
