@@ -54,8 +54,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Offset: 0.02
-    - _Outer: 0.05
+    - _Offset: 0.023
+    - _Outer: 0.04
     m_Colors:
     - _OuterlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
