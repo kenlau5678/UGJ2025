@@ -80,6 +80,13 @@ public class TurnManager : MonoBehaviour
     public void EndPlayerTurn()
     {
         phase = TurnPhase.EnemyTurn;
+        EnemyUnit[] enemies = FindObjectsOfType<EnemyUnit>();
+        if (enemies.Length == 0)
+        {
+            Debug.Log("没有敌人了，返回地图场景");
+            CollectionManager.instance.AddCoin(5);
+            PanelManager.instance.ShowEndPanel();
+        }
     }
 
 
@@ -87,13 +94,6 @@ public class TurnManager : MonoBehaviour
     {
         // --- 检查场上是否还有敌人 ---
         EnemyUnit[] enemies = FindObjectsOfType<EnemyUnit>();
-        if (enemies.Length == 0)
-        {
-            Debug.Log("没有敌人了，返回地图场景");
-            CollectionManager.instance.AddCoin(5);
-            SceneManager.LoadScene("Map");
-            yield break; // 停止协程
-        }
 
         // 如果还有敌人，执行敌人AI逻辑
         foreach (var enemy in enemies)

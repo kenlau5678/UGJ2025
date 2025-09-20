@@ -9,11 +9,11 @@ using Unity.VisualScripting;
 
 public class CardVisual : MonoBehaviour
 {
-    private bool initalize = false;
+    [SerializeField] private bool initalize = false;
 
     [Header("Card")]
     public Card parentCard;
-    private Transform cardTransform;
+    [SerializeField] private Transform cardTransform;
     private Vector3 rotationDelta;
     private int savedIndex;
     Vector3 movementDelta;
@@ -102,7 +102,6 @@ public class CardVisual : MonoBehaviour
     void Update()
     {
         if (!initalize || parentCard == null) return;
-
         HandPositioning();
         SmoothFollow();
         FollowRotation();

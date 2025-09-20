@@ -27,7 +27,8 @@ public class CardData : ScriptableObject
         Attack,         // 近战攻击，使用 amount
         Heal,           // 治疗，使用 amount
         RangedAttack,    // 远程攻击，使用 amount + attackRange
-        Shield
+        Shield,
+        Switch
     }
 
     // 攻击属性（可扩展）

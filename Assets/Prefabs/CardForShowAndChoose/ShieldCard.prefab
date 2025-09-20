@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 110.5, y: 190}
+  m_SizeDelta: {x: 142, y: 190}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8110481357869007721
 CanvasRenderer:
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 59c28665dcef93241a74290506470db3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a645499deac5944f593fdcd569acc1e7, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -165,7 +165,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -6}
-  m_SizeDelta: {x: 111.2, y: 190}
+  m_SizeDelta: {x: 142, y: 190}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3226935036547433282
 CanvasRenderer:
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c5bce7a4d97494a4cb49c179f7050c2c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b6c8558f7a88f480eaeb3bbd9c9a9d9e, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -304,12 +304,13 @@ GameObject:
   m_Component:
   - component: {fileID: 5647236407421411534}
   - component: {fileID: 7120376734261528799}
-  - component: {fileID: 7994647478966201829}
   - component: {fileID: 4132845374223140069}
   - component: {fileID: 404130344431792101}
+  - component: {fileID: 5271451586826501733}
+  - component: {fileID: 1721454646594174575}
   m_Layer: 5
   m_HasEditorInfo: 1
-  m_Name: HealCard
+  m_Name: ShieldCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -325,7 +326,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3449025543118524474}
   m_Father: {fileID: 0}
@@ -333,7 +334,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 109.64, y: 200}
+  m_SizeDelta: {x: 150, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7120376734261528799
 CanvasRenderer:
@@ -343,44 +344,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7310339964073049012}
   m_CullTransparentMesh: 1
---- !u!114 &7994647478966201829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7310339964073049012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c73809c3b87e04a6dae1308b12ab4749, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initalize: 0
-  parentCard: {fileID: 0}
-  cardTransform: {fileID: 0}
-  visualShadow: {fileID: 9157190824811683565}
-  shakeParent: {fileID: 3449025543118524474}
-  tiltParent: {fileID: 5862976466474931636}
-  cardImage: {fileID: 7697484841366769644}
-  followSpeed: 25
-  rotationAmount: 70
-  rotationSpeed: 50
-  autoTiltAmount: 15
-  manualTiltAmount: 30
-  tiltSpeed: 40
-  scaleAnimations: 1
-  scaleOnHover: 1.07
-  scaleOnSelect: 1.2
-  scaleTransition: 0.15
-  scaleEase: 27
-  selectPunchAmount: 20
-  hoverPunchAngle: 5
-  hoverTransition: 0.15
-  swapAnimations: 1
-  swapRotationAngle: 20
-  swapTransition: 0.2
-  swapVibrato: 5
-  curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
 --- !u!223 &4132845374223140069
 Canvas:
   m_ObjectHideFlags: 0
@@ -416,3 +379,32 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &5271451586826501733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7310339964073049012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &1721454646594174575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7310339964073049012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 511e39397a9261c4b8c669635ff6c318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

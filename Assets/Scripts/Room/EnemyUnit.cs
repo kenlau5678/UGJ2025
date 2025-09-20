@@ -39,6 +39,7 @@ public class EnemyUnit : MonoBehaviour
         // 只有在敌人回合才执行追击逻辑
         if (TurnManager.instance == null || TurnManager.instance.phase != TurnPhase.EnemyTurn)
             return;
+        if (player == null) player = FindObjectOfType<UnitController>();
     }
 
 

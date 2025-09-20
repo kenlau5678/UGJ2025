@@ -2,11 +2,24 @@ using UnityEngine;
 
 public class PanelManager : MonoBehaviour
 {
+    public static PanelManager instance;
     [Header("UI Panels")]
     public GameObject pausePanel;   // ÍÏµ½ Inspector ÖÐ
-
+    public GameObject endPanel;
     private bool isPaused = false;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+    }
     void Start()
     {
         if (pausePanel != null)
@@ -25,6 +38,15 @@ public class PanelManager : MonoBehaviour
         }
     }
 
+    public void ShowEndPanel()
+    {
+        endPanel.gameObject.SetActive(true);
+    }
+
+    public void CloseEndPanel()
+    {
+        endPanel.gameObject.SetActive(false);
+    }
     public void Pause()
     {
         if (pausePanel != null)

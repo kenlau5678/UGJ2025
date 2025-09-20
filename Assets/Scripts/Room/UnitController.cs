@@ -35,6 +35,7 @@ public class UnitController : MonoBehaviour
         healthSystem.SetMaxHealth(maxHealth);
         healthSystem.SetMaxShield(10f);
         healthSystem.SetShield(shield);
+        PlayerSwitchManager.instance.currentUnitController = this;
     }
 
     private void Update()
@@ -165,4 +166,31 @@ public class UnitController : MonoBehaviour
            
         }
     }
+
+    public void TeleportToGrid(GameGrid targetGrid)
+    {
+        // 释放原来的格子
+        if (startGrid != null)
+        {
+            startGrid.GetComponent<GameGrid>().isOccupied = false;
+        }
+
+        // 占用新的格子
+        targetGrid.isOccupied = true;
+        startGrid = targetGrid.gameObject;
+
+        // 更新坐标
+        string[] nameParts = targetGrid.name.Split('_');
+        int x = int.Parse(nameParts[1]);
+        int y = int.Parse(nameParts[2]);
+        startPoint = new Vector2Int(x, y);
+        currentGridPos = startPoint;
+
+        IsoGrid2D.instance.currentPlayerGrid = targetGrid;
+
+        // 设置父子关系并瞬移到格子中心
+        transform.SetParent(targetGrid.transform);
+        transform.localPosition = Vector3.zero;
+    }
+
 }

@@ -43,7 +43,6 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     [HideInInspector] public UnityEvent<Card> BeginDragEvent;
     [HideInInspector] public UnityEvent<Card> EndDragEvent;
     [HideInInspector] public UnityEvent<Card, bool> SelectEvent;
-
     void Start()
     {
         canvas = GetComponentInParent<Canvas>();
@@ -206,6 +205,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     public bool ExecuteEffect()
     {
         if (data == null) return false;
+        if(PlayerSwitchManager.instance.isChoosing == true) return false;
 
         bool effectExecuted = false;
         UnitController playerUnit = IsoGrid2D.instance.controller.GetComponent<UnitController>();
@@ -268,9 +268,15 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                 effectExecuted = true;
                 Debug.Log($"获得 {data.amount} 点护盾！");
                 break;
+            case CardData.CardEffectType.Switch:
+                PlayerSwitchManager.instance.StartChooseSwitch();
+                effectExecuted = true;
+                Debug.Log($"切换");
+                break;
             default:
                 Debug.LogWarning("No effect defined for this card type.");
                 break;
+            
         }
 
         data.ExecuteCustomEffect?.Invoke();

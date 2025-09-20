@@ -304,9 +304,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5647236407421411534}
   - component: {fileID: 7120376734261528799}
-  - component: {fileID: 7994647478966201829}
   - component: {fileID: 4132845374223140069}
   - component: {fileID: 404130344431792101}
+  - component: {fileID: 1598316632983047509}
+  - component: {fileID: -1572943818028361262}
   m_Layer: 5
   m_HasEditorInfo: 1
   m_Name: HealCard
@@ -325,7 +326,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3449025543118524474}
   m_Father: {fileID: 0}
@@ -343,44 +344,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7310339964073049012}
   m_CullTransparentMesh: 1
---- !u!114 &7994647478966201829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7310339964073049012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c73809c3b87e04a6dae1308b12ab4749, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initalize: 0
-  parentCard: {fileID: 0}
-  cardTransform: {fileID: 0}
-  visualShadow: {fileID: 9157190824811683565}
-  shakeParent: {fileID: 3449025543118524474}
-  tiltParent: {fileID: 5862976466474931636}
-  cardImage: {fileID: 7697484841366769644}
-  followSpeed: 25
-  rotationAmount: 70
-  rotationSpeed: 50
-  autoTiltAmount: 15
-  manualTiltAmount: 30
-  tiltSpeed: 40
-  scaleAnimations: 1
-  scaleOnHover: 1.07
-  scaleOnSelect: 1.2
-  scaleTransition: 0.15
-  scaleEase: 27
-  selectPunchAmount: 20
-  hoverPunchAngle: 5
-  hoverTransition: 0.15
-  swapAnimations: 1
-  swapRotationAngle: 20
-  swapTransition: 0.2
-  swapVibrato: 5
-  curve: {fileID: 11400000, guid: d4dd399fb2dab44429d866dc2259bb4b, type: 2}
 --- !u!223 &4132845374223140069
 Canvas:
   m_ObjectHideFlags: 0
@@ -416,3 +379,36 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1598316632983047509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7310339964073049012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &-1572943818028361262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7310339964073049012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 511e39397a9261c4b8c669635ff6c318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardData: {fileID: 11400000, guid: 0b71df51405c4ae48ac53ab3cba488a1, type: 2}
+  hoverScale: {x: 1.2, y: 1.2, z: 1}
+  hoverDuration: 0.2
+  clickDuration: 0.15

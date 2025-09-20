@@ -78,12 +78,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: f72eadbdefc63424c9985c3c7e77b682, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0bb46f58e63f7dc409c0dc25b0413a93, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.22, y: 2.04}
+  m_Size: {x: 2.04, y: 2.04}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -141,6 +141,13 @@ MonoBehaviour:
   startGrid: {fileID: 0}
   moveRange: 4
   moveSpeed: 2
+  healthSystem: {fileID: 0}
+  maxHealth: 0
+  currentHealth: 0
+  attackRange: 1
+  attackDamage: 5
+  currentGridPos: {x: 0, y: 0}
+  shield: 0
 --- !u!114 &3546787565854375578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,8 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 7027568675003791314}
-  maxHealth: 10
-  currentHealth: 0
+  shieldBar: {fileID: 0}
   smoothTime: 0.2
 --- !u!1 &5334065157313415013
 GameObject:
