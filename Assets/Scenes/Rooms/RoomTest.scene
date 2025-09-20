@@ -869,8 +869,8 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 1
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
@@ -2751,6 +2751,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2582855317599814803, guid: 892cb1b35f2f3764080733d1e6c43ff4, type: 3}
+      propertyPath: m_Size.x
+      value: 2.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582855317599814803, guid: 892cb1b35f2f3764080733d1e6c43ff4, type: 3}
+      propertyPath: m_Size.y
+      value: 2.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582855317599814803, guid: 892cb1b35f2f3764080733d1e6c43ff4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2db4f80cb05613a42bc71adfae154d11, type: 3}
+    - target: {fileID: 2582855317599814803, guid: 892cb1b35f2f3764080733d1e6c43ff4, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582855317599814803, guid: 892cb1b35f2f3764080733d1e6c43ff4, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fa49a2d9abbbfb84fbbd987461f31c32, type: 2}
     - target: {fileID: 3406468419049815727, guid: 892cb1b35f2f3764080733d1e6c43ff4, type: 3}
       propertyPath: maxHealth
       value: 10
@@ -2802,6 +2822,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5471558585402360791, guid: a5345cf0a3342ff42a45a3f9e0518267, type: 3}
+      propertyPath: m_Size.x
+      value: 2.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5471558585402360791, guid: a5345cf0a3342ff42a45a3f9e0518267, type: 3}
+      propertyPath: m_Size.y
+      value: 2.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5471558585402360791, guid: a5345cf0a3342ff42a45a3f9e0518267, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6546427fd9aad394bbff035b4e3db3e7, type: 3}
+    - target: {fileID: 5471558585402360791, guid: a5345cf0a3342ff42a45a3f9e0518267, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5471558585402360791, guid: a5345cf0a3342ff42a45a3f9e0518267, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fa49a2d9abbbfb84fbbd987461f31c32, type: 2}
     - target: {fileID: 5822160426406325450, guid: a5345cf0a3342ff42a45a3f9e0518267, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.28
