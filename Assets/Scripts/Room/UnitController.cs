@@ -13,13 +13,18 @@ public class UnitController : MonoBehaviour
     public float currentHealth;
 
     [Header("Combat")]
-    public int attackRange = 1;    // ¹¥»÷·¶Î§£¨ÉÏÏÂ×óÓÒ 1 ¸ñ£©
+    public int attackRange = 1;    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1 ï¿½ï¿½
     public float attackDamage = 5f;
+    public float meleeMultiplier = 1f;   
 
-    public Vector2Int currentGridPos; // Íæ¼Òµ±Ç°¸ñ×ÓÎ»ÖÃ
+    public float rangedMultiplier = 1f;  
+
+    public float dodgeChance = 0f;       
+
+    public Vector2Int currentGridPos; // ï¿½ï¿½Òµï¿½Ç°ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
 
 
-    public float shield = 0f;      // »¤¶ÜÖµ
+    public float shield = 0f;      // ï¿½ï¿½ï¿½ï¿½Öµ
     private void Start()
     {
         if (IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y) != null)
@@ -66,7 +71,7 @@ public class UnitController : MonoBehaviour
 
     private System.Collections.IEnumerator FollowPath(List<GameGrid> path)
     {
-        // ÏÈÊÍ·ÅÆðÊ¼¸ñ×Ó
+        // ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
         if (startGrid != null)
             startGrid.GetComponent<GameGrid>().isOccupied = false;
 
@@ -74,7 +79,7 @@ public class UnitController : MonoBehaviour
         {
             Vector3 targetPos = grid.transform.position;
 
-            // ÒÆ¶¯µ½Ä¿±ê¸ñ×Ó
+            // ï¿½Æ¶ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½
             while ((transform.position - targetPos).sqrMagnitude > 0.01f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
@@ -83,14 +88,14 @@ public class UnitController : MonoBehaviour
 
             transform.position = targetPos;
 
-            // ---- ¸üÐÂ¸ñ×ÓÕ¼ÓÃ ----
+            // ---- ï¿½ï¿½ï¿½Â¸ï¿½ï¿½ï¿½Õ¼ï¿½ï¿½ ----
             if (startGrid != null)
-                startGrid.GetComponent<GameGrid>().isOccupied = false;  // Çå¿Õ¾ÉµÄ
+                startGrid.GetComponent<GameGrid>().isOccupied = false;  // ï¿½ï¿½Õ¾Éµï¿½
 
-            grid.isOccupied = true;  // Õ¼ÓÃÐÂµÄ
-            startGrid = grid.gameObject;  // ¸üÐÂµ±Ç°¸ñ×Ó
+            grid.isOccupied = true;  // Õ¼ï¿½ï¿½ï¿½Âµï¿½
+            startGrid = grid.gameObject;  // ï¿½ï¿½ï¿½Âµï¿½Ç°ï¿½ï¿½ï¿½ï¿½
 
-            // ¸üÐÂ×ø±ê
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             string[] nameParts = grid.name.Split('_');
             int x = int.Parse(nameParts[1]);
             int y = int.Parse(nameParts[2]);
@@ -99,14 +104,19 @@ public class UnitController : MonoBehaviour
 
             IsoGrid2D.instance.currentPlayerGrid = grid.GetComponent<GameGrid>();
 
-            // ¸üÐÂ¸¸×Ó¹ØÏµ
+            // ï¿½ï¿½ï¿½Â¸ï¿½ï¿½Ó¹ï¿½Ïµ
             transform.SetParent(grid.transform);
-            transform.localPosition = Vector3.zero; // ±£Ö¤¾ÓÖÐ
+            transform.localPosition = Vector3.zero; // ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½
         }
     }
 
     public void TakeDamage(float amount)
     {
+        if (Random.value < dodgeChance)
+        {
+            Debug.Log($"{name} é—ªé¿äº†è¿™æ¬¡æ”»å‡»ï¼");
+            return;
+        }
 
         if (shield > 0)
         {
@@ -121,11 +131,11 @@ public class UnitController : MonoBehaviour
                 shield = 0f;
             }
 
-            // ¸üÐÂ»¤¶ÜÌõÏÔÊ¾µ±Ç°Öµ
+            // ï¿½ï¿½ï¿½Â»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Ç°Öµ
             healthSystem.SetShield(shield);
         }
 
-        // Ê£ÓàÉËº¦¿ÛÑª
+        // Ê£ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½Ñª
         if (amount > 0)
         {
             currentHealth -= amount;
@@ -135,7 +145,7 @@ public class UnitController : MonoBehaviour
             {
                 currentHealth = 0;
                 Debug.Log("Player is dead!");
-                // TODO: ÓÎÏ·Ê§°ÜÂß¼­
+                // TODO: ï¿½ï¿½Ï·Ê§ï¿½ï¿½ï¿½ß¼ï¿½
             }
         }
     }
@@ -143,7 +153,7 @@ public class UnitController : MonoBehaviour
     public void AddShield(float amount)
     {
         shield += amount;
-        Debug.Log($"Íæ¼Ò»ñµÃ»¤¶Ü {amount}£¬µ±Ç°»¤¶ÜÖµ: {shield}");
+        Debug.Log($"ï¿½ï¿½Ò»ï¿½Ã»ï¿½ï¿½ï¿½ {amount}ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Öµ: {shield}");
         healthSystem.SetShield(shield);
     }
 
@@ -161,7 +171,7 @@ public class UnitController : MonoBehaviour
         EnemyUnit enemy = targetGrid.GetComponentInChildren<EnemyUnit>();
         if (enemy != null)
         {
-            Debug.Log($"Íæ¼Ò¹¥»÷ {enemy.name}£¬Ôì³É {attackDamage} ÉËº¦£¡");
+            Debug.Log($"ï¿½ï¿½Ò¹ï¿½ï¿½ï¿½ {enemy.name}ï¿½ï¿½ï¿½ï¿½ï¿½ {attackDamage} ï¿½Ëºï¿½ï¿½ï¿½");
             enemy.TakeDamage(attackDamage);
            
         }
@@ -169,17 +179,17 @@ public class UnitController : MonoBehaviour
 
     public void TeleportToGrid(GameGrid targetGrid)
     {
-        // ÊÍ·ÅÔ­À´µÄ¸ñ×Ó
+        // ï¿½Í·ï¿½Ô­ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½
         if (startGrid != null)
         {
             startGrid.GetComponent<GameGrid>().isOccupied = false;
         }
 
-        // Õ¼ÓÃÐÂµÄ¸ñ×Ó
+        // Õ¼ï¿½ï¿½ï¿½ÂµÄ¸ï¿½ï¿½ï¿½
         targetGrid.isOccupied = true;
         startGrid = targetGrid.gameObject;
 
-        // ¸üÐÂ×ø±ê
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         string[] nameParts = targetGrid.name.Split('_');
         int x = int.Parse(nameParts[1]);
         int y = int.Parse(nameParts[2]);
@@ -188,7 +198,7 @@ public class UnitController : MonoBehaviour
 
         IsoGrid2D.instance.currentPlayerGrid = targetGrid;
 
-        // ÉèÖÃ¸¸×Ó¹ØÏµ²¢Ë²ÒÆµ½¸ñ×ÓÖÐÐÄ
+        // ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½Ó¹ï¿½Ïµï¿½ï¿½Ë²ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         transform.SetParent(targetGrid.transform);
         transform.localPosition = Vector3.zero;
     }
