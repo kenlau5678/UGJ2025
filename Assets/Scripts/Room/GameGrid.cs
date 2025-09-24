@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;   // 别忘了引入 DOTween 命名空间
 
 public class GameGrid : MonoBehaviour
 {
@@ -7,11 +8,14 @@ public class GameGrid : MonoBehaviour
     private Color originalColor;
     public Color hoverColor = Color.green;
     public Color moveRangeColor = new Color(1f, 0.5f, 0f); // 橙色
-    public bool isInRange=false;
+    public bool isInRange = false;
 
     public SpriteRenderer selectGrid;
     public bool isAttackTarget = false;
     public bool isOccupied = false;
+
+    public UnitController occupiedPlayer;
+    public EnemyUnit currentEnemy;
 
     void Start()
     {
@@ -22,18 +26,31 @@ public class GameGrid : MonoBehaviour
 
     void OnMouseEnter()
     {
-        //rend.color = hoverColor;
         selectGrid.enabled = true;
         IsoGrid2D.instance.currentSelectedGrid = this;
-        //HandManager.instance.SetCurrentHoverGrid(this);
+
+        // 如果有玩家站在格子上，做一个放大缩小动画
+        if (occupiedPlayer != null)
+        {
+            Transform playerTransform = occupiedPlayer.transform;
+
+            // 先杀掉可能还在跑的 scale 动画，避免叠加
+            playerTransform.DOKill();
+
+            // 保存原始缩放
+            Vector3 originalScale = playerTransform.localScale;
+
+            // 放大到1.2倍，再回到原始大小
+            playerTransform.DOScale(originalScale * 1.1f, 0.1f)
+                .SetLoops(2, LoopType.Yoyo) // 往返两次
+                .SetEase(Ease.OutQuad);
+        }
     }
 
     void OnMouseExit()
     {
-        //rend.color = originalColor;
         selectGrid.enabled = false;
         IsoGrid2D.instance.currentSelectedGrid = null;
-        //HandManager.instance.ClearCurrentHoverGrid(this);
     }
 
     // 外部调用改变格子颜色
@@ -50,18 +67,25 @@ public class GameGrid : MonoBehaviour
 
     void OnMouseDown()
     {
-
         UnitController player = FindObjectOfType<UnitController>();
 
         if (isInRange) // 移动
         {
-            player.MoveToGrid(this);
+            IsoGrid2D.instance.controller.GetComponent<UnitController>().MoveToGrid(this);
         }
         else if (isAttackTarget) // 攻击
         {
-            player.Attack(this);
+            occupiedPlayer.Attack(this);
             IsoGrid2D.instance.ClearHighlight();
         }
+        else
+        {
+            if(occupiedPlayer != null)
+            {
+                IsoGrid2D.instance.controller = occupiedPlayer.gameObject;
+                IsoGrid2D.instance.currentPlayerGrid = this;
+                occupiedPlayer.Move();
+            }
+        }
     }
-
 }

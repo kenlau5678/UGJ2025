@@ -69,7 +69,7 @@ public class PlayerSwitchManager : MonoBehaviour
         isChoosing = false;
         foreach (EnemyUnit enemy in enemyUnits)
         {
-            enemy.player = currentUnitController;
+            //enemy.player = currentUnitController;
         }
         foreach (Button switchbutton in switchButtons)
         {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class EnemyUnit : MonoBehaviour
 {
@@ -8,14 +9,14 @@ public class EnemyUnit : MonoBehaviour
     public GameObject startGrid;
     public int moveRange = 3;
     public float moveSpeed = 2f;
-    public float detectRange = 3f;  // 敌人发现玩家的范围（按格子数）
 
-    public UnitController player;  // 玩家
+    public UnitController targetPlayer;  // 追击的目标玩家
     public HealthSystem healthSystem;
     public float maxHealth;
     public float currentHealth;
 
-    public float attackDamage=2f;
+    public float attackDamage = 2f;
+
     private void Start()
     {
         // 初始化敌人的位置
@@ -27,9 +28,6 @@ public class EnemyUnit : MonoBehaviour
             transform.localPosition = Vector3.zero;
         }
 
-        // 找到玩家
-        player = FindObjectOfType<UnitController>();
-
         currentHealth = maxHealth;
         healthSystem.SetMaxHealth(maxHealth);
     }
@@ -39,18 +37,43 @@ public class EnemyUnit : MonoBehaviour
         // 只有在敌人回合才执行追击逻辑
         if (TurnManager.instance == null || TurnManager.instance.phase != TurnPhase.EnemyTurn)
             return;
-        if (player == null) player = FindObjectOfType<UnitController>();
     }
 
+    /// <summary>
+    /// 选择最近的玩家作为目标
+    /// </summary>
+    private void ChooseNearestPlayer()
+    {
+        UnitController[] players = FindObjectsOfType<UnitController>();
+        if (players == null || players.Length == 0) return;
+
+        UnitController nearest = null;
+        int shortestPath = int.MaxValue;
+
+        foreach (var p in players)
+        {
+            Debug.Log(p);
+            List<GameGrid> path = IsoGrid2D.instance.FindPath(startPoint, p.currentGridPos);
+            if (path != null && path.Count < shortestPath)
+            {
+                shortestPath = path.Count;
+                nearest = p;
+                Debug.Log(nearest);
+            }
+        }
+
+        targetPlayer = nearest;
+    }
 
     /// <summary>
     /// 敌人追踪玩家
     /// </summary>
-    /// <summary>
-    /// 敌人追踪玩家
-    /// </summary>
-    public void ChasePlayer(Vector2Int playerPos)
+    public void ChasePlayer()
     {
+        ChooseNearestPlayer();
+        if (targetPlayer == null) return;
+
+        Vector2Int playerPos = targetPlayer.currentGridPos;
         GameObject playerGrid = IsoGrid2D.instance.GetTile(playerPos.x, playerPos.y);
         if (playerGrid != null)
         {
@@ -62,13 +85,12 @@ public class EnemyUnit : MonoBehaviour
             // --- 如果路径只有1（说明敌人就在原地） ---
             if (path.Count == 1)
             {
-                // 判断是否可以攻击玩家
                 int dist = Mathf.Abs(playerPos.x - startPoint.x) + Mathf.Abs(playerPos.y - startPoint.y);
                 if (dist == 1) // 玩家相邻
                 {
                     AttackPlayer();
                 }
-                return; // 不移动，直接结束
+                return;
             }
 
             // --- 正常移动逻辑 ---
@@ -79,8 +101,6 @@ public class EnemyUnit : MonoBehaviour
             StartCoroutine(FollowPath(limitedPath));
         }
     }
-
-
 
     public void Move()
     {
@@ -103,12 +123,15 @@ public class EnemyUnit : MonoBehaviour
 
     private IEnumerator FollowPath(List<GameGrid> path)
     {
-        // --- 先释放起始格子 ---
-        if (startGrid != null)
-            startGrid.GetComponent<GameGrid>().isOccupied = false;
+        // --- 不要马上释放起点 ---
+        // if (startGrid != null)
+        //     startGrid.GetComponent<GameGrid>().isOccupied = false;
 
         foreach (var grid in path)
         {
+            // 先把目标格子占用，防止别的敌人走进来
+            grid.isOccupied = true;
+
             Vector3 targetPos = grid.transform.position;
 
             while ((transform.position - targetPos).sqrMagnitude > 0.01f)
@@ -119,38 +142,40 @@ public class EnemyUnit : MonoBehaviour
 
             transform.position = targetPos;
 
-            // ---- 更新格子占用 ----
+            // 到达后再释放旧的格子
             if (startGrid != null)
-                startGrid.GetComponent<GameGrid>().isOccupied = false; // 清空旧的
+                startGrid.GetComponent<GameGrid>().isOccupied = false;
 
-            grid.isOccupied = true;  // 占用新的
             startGrid = grid.gameObject;  // 更新当前格子
 
             // 更新坐标
-            string[] nameParts = grid.name.Split('_'); // 名称格式 Tile_x_y
+            string[] nameParts = grid.name.Split('_');
             int x = int.Parse(nameParts[1]);
             int y = int.Parse(nameParts[2]);
             startPoint = new Vector2Int(x, y);
 
-            // 更新父子关系
             transform.SetParent(grid.transform);
             transform.localPosition = Vector3.zero;
         }
 
-        // 判断与玩家是否相邻
-        Vector2Int playerPos = player.currentGridPos;
-        int dist = Mathf.Abs(playerPos.x - startPoint.x) + Mathf.Abs(playerPos.y - startPoint.y);
-        if (dist == 1) // 上下左右相邻
+        // 攻击判定
+        if (targetPlayer != null)
         {
-            AttackPlayer();
+            Vector2Int playerPos = targetPlayer.currentGridPos;
+            int dist = Mathf.Abs(playerPos.x - startPoint.x) + Mathf.Abs(playerPos.y - startPoint.y);
+            if (dist == 1)
+            {
+                AttackPlayer();
+            }
         }
     }
 
+
     private void AttackPlayer()
     {
-        if (player == null || currentHealth <= 0) return;
+        if (targetPlayer == null || currentHealth <= 0) return;
 
-        player.TakeDamage(attackDamage);
+        targetPlayer.TakeDamage(attackDamage);
         Debug.Log("Enemy attacks player!");
     }
 
@@ -164,13 +189,11 @@ public class EnemyUnit : MonoBehaviour
             Debug.Log($"{name} is dead!");
 
             Die();
-
         }
     }
+
     private void Die()
     {
-        // 这里可以播放死亡动画 / 掉落物品 / 通知系统
-        // 目前先直接销毁对象
         Destroy(gameObject);
         if (startGrid != null)
             startGrid.GetComponent<GameGrid>().isOccupied = false;

@@ -27,10 +27,12 @@ public class UnitController : MonoBehaviour
     public float shield = 0f;      // ����ֵ
     private void Start()
     {
+        currentGridPos = startPoint;
         if (IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y) != null)
         {
             startGrid = IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y);
             startGrid.GetComponent<GameGrid>().isOccupied = true;
+            startGrid.GetComponent<GameGrid>().occupiedPlayer = this;
             transform.SetParent(startGrid.transform);
             transform.localPosition = Vector3.zero;
             IsoGrid2D.instance.currentPlayerGrid = startGrid.GetComponent<GameGrid>();
@@ -88,12 +90,16 @@ public class UnitController : MonoBehaviour
 
             transform.position = targetPos;
 
-            // ---- ���¸���ռ�� ----
             if (startGrid != null)
-                startGrid.GetComponent<GameGrid>().isOccupied = false;  // ��վɵ�
+            {
+                var oldGrid = startGrid.GetComponent<GameGrid>();
+                oldGrid.isOccupied = false;
+                oldGrid.occupiedPlayer = null; // 清空旧格子上的玩家
+            }
 
-            grid.isOccupied = true;  // ռ���µ�
-            startGrid = grid.gameObject;  // ���µ�ǰ����
+            grid.isOccupied = true;
+            grid.occupiedPlayer = this; // 让格子记录当前玩家
+            startGrid = grid.gameObject;
 
             // ��������
             string[] nameParts = grid.name.Split('_');

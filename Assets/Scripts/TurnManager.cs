@@ -100,8 +100,8 @@ public class TurnManager : MonoBehaviour
         {
             if (enemy != null)
             {
-                enemy.ChasePlayer(enemy.player.currentGridPos);
-                yield return new WaitForSeconds(1f); // 等待敌人行动完成
+                enemy.ChasePlayer();
+                yield return new WaitForSeconds(1.5f); // 等待敌人行动完成
             }
         }
 

@@ -15,8 +15,6 @@ public class HorizontalCardHolder : MonoBehaviour
     [SerializeField] private GameObject slotPrefab;
     private RectTransform rect;
 
-    [Header("Spawn Settings")]
-    [SerializeField] private int cardsToSpawn = 7;
     public List<Card> cards;
 
     [Header("Card Draw Settings")]
@@ -25,8 +23,6 @@ public class HorizontalCardHolder : MonoBehaviour
     bool isCrossing = false;
     [SerializeField] private bool tweenCardReturn = true;
 
-    [Header("Card Types")]
-    [SerializeField] private List<CardData> availableCardTypes;  // Assign in Inspector: Your deck of card prototypes.
     [Header("起始手牌数量")]
     [SerializeField] private int startingHandSize = 5;
 
