@@ -492,7 +492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5084986422234508334, guid: 0d632ccfda817b44facad0ff0054a2f5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5822160426406325450, guid: 0d632ccfda817b44facad0ff0054a2f5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -584,10 +584,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 872851f17754d0646944ad83cb0e558a, type: 2}
   - {fileID: 11400000, guid: 9ce2dca3c9a679d4a9b2e8f036efe494, type: 2}
   - {fileID: 11400000, guid: 9ce2dca3c9a679d4a9b2e8f036efe494, type: 2}
+  - {fileID: 11400000, guid: b1d584c12eb3782429366dec14805596, type: 2}
+  - {fileID: 11400000, guid: b1d584c12eb3782429366dec14805596, type: 2}
+  - {fileID: 11400000, guid: b1d584c12eb3782429366dec14805596, type: 2}
   - {fileID: 11400000, guid: 9ce2dca3c9a679d4a9b2e8f036efe494, type: 2}
-  - {fileID: 11400000, guid: b1d584c12eb3782429366dec14805596, type: 2}
-  - {fileID: 11400000, guid: b1d584c12eb3782429366dec14805596, type: 2}
-  - {fileID: 11400000, guid: b1d584c12eb3782429366dec14805596, type: 2}
+  - {fileID: 11400000, guid: 9ce2dca3c9a679d4a9b2e8f036efe494, type: 2}
+  - {fileID: 11400000, guid: 9ce2dca3c9a679d4a9b2e8f036efe494, type: 2}
+  - {fileID: 11400000, guid: 9ce2dca3c9a679d4a9b2e8f036efe494, type: 2}
   deck: []
 --- !u!4 &324216002
 Transform:
@@ -2703,7 +2706,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5084986422234508334, guid: 0d632ccfda817b44facad0ff0054a2f5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5822160426406325450, guid: 0d632ccfda817b44facad0ff0054a2f5, type: 3}
       propertyPath: m_LocalPosition.x
