@@ -94,6 +94,7 @@ public class PlayerSwitchManager : MonoBehaviour
         if (!isChoosing || newSlot.isActive) return;
 
         currentUnitGrid = currentUnitController.currentGridPos;
+        int remainingAP = currentUnitController.actionPoints;
 
         // 互换在场状态
         currentSlot.isActive = false;
@@ -105,8 +106,7 @@ public class PlayerSwitchManager : MonoBehaviour
 
         // 上场新角色
         currentUnitController = newSlot.unit;
-        currentUnitController.RecoverActionPoint();
-
+        currentUnitController.SetActionPoint(remainingAP);
         int currentListIndex = System.Array.IndexOf(TurnManager.instance.unitControllers, currentSlot.unit);
         if (currentListIndex >= 0)
         {

@@ -257,5 +257,17 @@ public class UnitController : MonoBehaviour
         sr.color = c;
     }
 
+    public void SetActionPoint(int actionPoint)
+    {
+        actionPoints = actionPoint;
+        TurnManager.instance.actionPointText.text = "Action Point: " + TurnManager.instance.currentController.actionPoints;
+        if (actionPoints <= 0)
+        {
+            // 半透明
+            Color c = sr.color;
+            c.a = 0.75f;
+            sr.color = c;
+        }
+    }
 
 }
