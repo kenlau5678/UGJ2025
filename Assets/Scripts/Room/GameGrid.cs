@@ -1,13 +1,13 @@
-using UnityEngine;
 using DG.Tweening;   // 别忘了引入 DOTween 命名空间
-
+using UnityEngine;
+using UnityEngine.EventSystems;
 public class GameGrid : MonoBehaviour
 {
     public Vector2Int gridPos;
     private SpriteRenderer rend;
     private Color originalColor;
     public Color hoverColor = Color.green;
-    public Color moveRangeColor = new Color(1f, 0.5f, 0f); // 橙色
+    public Color moveRangeColor = new Color(1f, 0.5f, 0f,0.5f); // 橙色
     public bool isInRange = false;
 
     public SpriteRenderer selectGrid;
@@ -67,24 +67,26 @@ public class GameGrid : MonoBehaviour
 
     void OnMouseDown()
     {
+        //if (EventSystem.current.IsPointerOverGameObject()) return;
         UnitController player = FindObjectOfType<UnitController>();
 
         if (isInRange) // 移动
         {
-            IsoGrid2D.instance.controller.GetComponent<UnitController>().MoveToGrid(this);
+            UnitController playerToAction = IsoGrid2D.instance.controller.GetComponent<UnitController>();
+            playerToAction.MoveToGrid(this);
         }
         else if (isAttackTarget) // 攻击
         {
-            occupiedPlayer.Attack(this);
+            IsoGrid2D.instance.controller.GetComponent<UnitController>().Attack(this);
             IsoGrid2D.instance.ClearHighlight();
         }
         else
         {
             if(occupiedPlayer != null)
             {
-                IsoGrid2D.instance.controller = occupiedPlayer.gameObject;
-                IsoGrid2D.instance.currentPlayerGrid = this;
-                occupiedPlayer.Move();
+                
+                TurnManager.instance.ChangePlayer(occupiedPlayer);
+                
             }
         }
     }

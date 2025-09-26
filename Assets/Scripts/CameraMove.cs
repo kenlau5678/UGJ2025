@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
+    public static CameraMove instance;
     public CinemachineVirtualCamera virtualCamera; // 虚拟摄像机
     public float moveSpeed = 2f;                   // 移动速度
     public float offsetLimit = 3f;                 // 相对初始offset的最大偏移
@@ -15,6 +16,19 @@ public class CameraMove : MonoBehaviour
     private Vector3 currentOffset;
     private Transform currentTarget;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
         transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
@@ -59,7 +73,7 @@ public class CameraMove : MonoBehaviour
         {
             virtualCamera.Follow = target.transform;
             currentTarget = target.transform;
-
+            
             // 可选：切换目标时重置偏移
             currentOffset = initialOffset;
         }

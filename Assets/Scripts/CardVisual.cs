@@ -1,11 +1,12 @@
-using System;
-using UnityEngine;
 using DG.Tweening;
+using System;
 using System.Collections;
-using UnityEngine.EventSystems;
+using System.Collections.Generic;
 using Unity.Collections;
-using UnityEngine.UI;
 using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CardVisual : MonoBehaviour
 {
@@ -64,11 +65,12 @@ public class CardVisual : MonoBehaviour
     private float curveYOffset;
     private float curveRotationOffset;
     private Coroutine pressCoroutine;
-
-
+    public HorizontalCardHolder horizontalCardHolder;
+    
     private CanvasGroup canvasGroup;
     private void Start()
     {
+        horizontalCardHolder = FindFirstObjectByType<HorizontalCardHolder>();
         shadowDistance = visualShadow.localPosition;
         canvasGroup = GetComponent<CanvasGroup>();
     }
@@ -172,11 +174,23 @@ public class CardVisual : MonoBehaviour
 
     private void BeginDrag(Card card)
     {
-        if(scaleAnimations)
+        if (scaleAnimations)
             transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
         canvasGroup.alpha = Mathf.Clamp01(canvasGroup.alpha - 0.25f);
         canvas.overrideSorting = true;
-        
+
+        Vector2Int playerPos = TurnManager.instance.currentController.currentGridPos;
+
+        if (parentCard.data.effectType == CardData.CardEffectType.Attack || parentCard.data.effectType == CardData.CardEffectType.RemoteAttack)
+        {
+            IsoGrid2D.instance.HighlightRangedAttackRangeHover(playerPos, parentCard.data.attackRange);
+        }
+        else
+        {
+            IsoGrid2D.instance.HighlightSingleTile(playerPos);
+        }
+
+        horizontalCardHolder.isDraging = true;
     }
 
     private void EndDrag(Card card)
@@ -184,21 +198,45 @@ public class CardVisual : MonoBehaviour
         canvas.overrideSorting = false;
         transform.DOScale(1, scaleTransition).SetEase(scaleEase);
         canvasGroup.alpha = Mathf.Clamp01(canvasGroup.alpha + 0.25f);
+        TurnManager.instance.ChangePlayer(TurnManager.instance.currentController);
+        horizontalCardHolder.isDraging = false;
     }
 
     private void PointerEnter(Card card)
     {
-        if(scaleAnimations)
+        if (scaleAnimations)
             transform.DOScale(scaleOnHover, scaleTransition).SetEase(scaleEase);
 
         DOTween.Kill(2, true);
         shakeParent.DOPunchRotation(Vector3.forward * hoverPunchAngle, hoverTransition, 20, 1).SetId(2);
+
+        if (TurnManager.instance.currentController.isMoving)
+            return;
+
+        Vector2Int playerPos = TurnManager.instance.currentController.currentGridPos;
+        if(parentCard.data.effectType == CardData.CardEffectType.Attack || parentCard.data.effectType == CardData.CardEffectType.RemoteAttack)
+        {
+            IsoGrid2D.instance.HighlightRangedAttackRangeHover(playerPos, parentCard.data.attackRange);
+        }
+        else
+        {
+            IsoGrid2D.instance.HighlightSingleTile(playerPos);
+        }
     }
+
+
 
     private void PointerExit(Card card)
     {
+        if (horizontalCardHolder.isDraging) return;
         if (!parentCard.wasDragged)
+        {
             transform.DOScale(1, scaleTransition).SetEase(scaleEase);
+        }
+
+        if(TurnManager.instance.currentController.isMoving) return;
+        TurnManager.instance.ChangePlayer(TurnManager.instance.currentController);
+
     }
 
     private void PointerUp(Card card, bool longPress)
@@ -220,4 +258,16 @@ public class CardVisual : MonoBehaviour
         shadowCanvas.overrideSorting = false;
     }
 
+    private void OnDestroy()
+    {
+        Debug.Log(parentCard.data.effectType);
+        if(parentCard.data.effectType == CardData.CardEffectType.Attack || parentCard.data.effectType == CardData.CardEffectType.RemoteAttack)
+        {
+            IsoGrid2D.instance.HighlightAttackArea(TurnManager.instance.currentController.currentGridPos, parentCard.data.attackRange);
+        }
+        else
+        {
+            IsoGrid2D.instance.ClearHighlight();
+        }
+    }
 }

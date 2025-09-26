@@ -201,6 +201,14 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
     //public abstract void ExecuteEffect();
 
 
+    //public bool CanEffect()
+    //{
+    //    if (data == null) return false;
+    //    if (PlayerSwitchManager.instance.isChoosing == true) return false;
+
+    //    return true;
+    //}
+
     // 返回是否成功执行
     public bool ExecuteEffect()
     {
@@ -234,13 +242,11 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                     }
                 }
                 break;
-
-            case CardData.CardEffectType.RangedAttack:
+            case CardData.CardEffectType.RemoteAttack:
                 {
-                    bool hasRangedTarget = IsoGrid2D.instance.HighlightRangedAttackRange(
-                        playerUnit.currentGridPos,
-                        data.attackRange // 使用卡牌的远程范围
-                    );
+
+                    bool hasRangedTarget = IsoGrid2D.instance.HighlightAttackArea(playerUnit.currentGridPos, data.attackRange);
+                    Debug.Log(hasRangedTarget);
 
                     if (hasRangedTarget)
                     {

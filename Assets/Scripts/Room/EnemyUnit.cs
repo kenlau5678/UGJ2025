@@ -24,6 +24,7 @@ public class EnemyUnit : MonoBehaviour
         {
             startGrid = IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y);
             startGrid.GetComponent<GameGrid>().isOccupied = true;
+            startGrid.GetComponent<GameGrid>().currentEnemy = this;
             transform.SetParent(startGrid.transform);
             transform.localPosition = Vector3.zero;
         }
@@ -123,14 +124,11 @@ public class EnemyUnit : MonoBehaviour
 
     private IEnumerator FollowPath(List<GameGrid> path)
     {
-        // --- 不要马上释放起点 ---
-        // if (startGrid != null)
-        //     startGrid.GetComponent<GameGrid>().isOccupied = false;
-
         foreach (var grid in path)
         {
-            // 先把目标格子占用，防止别的敌人走进来
+            // ---- 把目标格子先标记为占用，防止冲突 ----
             grid.isOccupied = true;
+            grid.currentEnemy = this;
 
             Vector3 targetPos = grid.transform.position;
 
@@ -142,13 +140,17 @@ public class EnemyUnit : MonoBehaviour
 
             transform.position = targetPos;
 
-            // 到达后再释放旧的格子
+            // ---- 释放旧的格子 ----
             if (startGrid != null)
-                startGrid.GetComponent<GameGrid>().isOccupied = false;
+            {
+                GameGrid oldGrid = startGrid.GetComponent<GameGrid>();
+                oldGrid.isOccupied = false;
+                oldGrid.currentEnemy = null;
+            }
 
-            startGrid = grid.gameObject;  // 更新当前格子
+            // ---- 占用新的格子 ----
+            startGrid = grid.gameObject;
 
-            // 更新坐标
             string[] nameParts = grid.name.Split('_');
             int x = int.Parse(nameParts[1]);
             int y = int.Parse(nameParts[2]);
@@ -171,6 +173,7 @@ public class EnemyUnit : MonoBehaviour
     }
 
 
+
     private void AttackPlayer()
     {
         if (targetPlayer == null || currentHealth <= 0) return;
@@ -182,7 +185,9 @@ public class EnemyUnit : MonoBehaviour
     public void TakeDamage(float amount)
     {
         currentHealth -= amount;
+        FindObjectOfType<CameraShake>().Shake();
         healthSystem.SetHealth(currentHealth);
+
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -194,8 +199,13 @@ public class EnemyUnit : MonoBehaviour
 
     private void Die()
     {
-        Destroy(gameObject);
         if (startGrid != null)
-            startGrid.GetComponent<GameGrid>().isOccupied = false;
+        {
+            GameGrid grid = startGrid.GetComponent<GameGrid>();
+            grid.isOccupied = false;
+            grid.currentEnemy = null;
+        }
+        Destroy(gameObject);
     }
+
 }
