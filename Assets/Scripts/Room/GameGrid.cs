@@ -16,7 +16,9 @@ public class GameGrid : MonoBehaviour
 
     public UnitController occupiedPlayer;
     public EnemyUnit currentEnemy;
+    public bool isInterable = false; // 是否可交互
 
+    public Color interactColor = Color.blue; // 可交互格子颜色
     void Start()
     {
         rend = GetComponent<SpriteRenderer>();
