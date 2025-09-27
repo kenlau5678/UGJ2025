@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,27 +11,62 @@ public class TurnManager : MonoBehaviour
 {
     public static TurnManager instance;
 
-
+    public UnitController currentController;
     public TurnPhase phase = TurnPhase.PlayerTurn;
     public int turnIndex = 1;
     public EnemyUnit enemyUnit;
 
     [SerializeField] private HorizontalCardHolder playerCardHolder; // 玩家手牌管理器
 
-    [Header("行动点")]
-    public int maxActionPoints = 2;   // 每回合初始行动点
+
     public int actionPoints;          // 当前行动点
     public TextMeshProUGUI actionPointText;
+
+    public UnitController[] unitControllers;
     private void Awake()
     {
         if (instance == null) instance = this;
         else Destroy(gameObject);
     }
+
+
+    public void ChangePlayer(UnitController player)
+    {
+        if (player.isActive == false) return;
+        IsoGrid2D.instance.ClearHighlight();
+        currentController = player;
+        IsoGrid2D.instance.controller = currentController.gameObject;
+        IsoGrid2D.instance.currentPlayerGrid = currentController.startGrid.GetComponent<GameGrid>();
+        actionPointText.text = "[" + currentController.name + "]" + "Action Point: " + currentController.actionPoints;
+        CameraMove.instance.ChangeFollow(player.gameObject);
+        currentController.Move();
+        PlayerSwitchManager.instance.currentUnitController = currentController;
+        var psm = PlayerSwitchManager.instance;
+        if (psm != null)
+        {
+            psm.currentUnitController = player;
+
+            // 找到 player 对应的 slot index
+            int slotIndex = psm.allSlots.FindIndex(s => s.unit == player);
+            if (slotIndex >= 0)
+            {
+                psm.currentIndex = slotIndex;
+            }
+            else
+            {
+                Debug.LogWarning("玩家未在 PlayerSwitchManager 的 slots 中找到！");
+            }
+        }
+    }
     public void StartPlayerTurn()
     {
         // 回合开始时重置行动点
-        actionPoints = maxActionPoints;
-        actionPointText.text = "Action Point: " + actionPoints;
+        foreach (var unitController in unitControllers) 
+        {
+            unitController.RecoverActionPoint();
+        }
+        actionPointText.text = "[" + unitControllers[0].name +"]"+"Action Point: " + unitControllers[0].actionPoints;
+        ChangePlayer(unitControllers[0]);
         // --- 回合开始时抽一张卡 ---
         if (playerCardHolder != null)
             playerCardHolder.StartCoroutine(playerCardHolder.DrawNewCard());
@@ -45,6 +81,7 @@ public class TurnManager : MonoBehaviour
 
     private void Start()
     {
+        unitControllers = FindObjectsOfType<UnitController>();
         StartCoroutine(RunTurnLoop());
     }
 
@@ -100,8 +137,8 @@ public class TurnManager : MonoBehaviour
         {
             if (enemy != null)
             {
-                enemy.ChasePlayer(enemy.player.currentGridPos);
-                yield return new WaitForSeconds(1f); // 等待敌人行动完成
+                enemy.ChasePlayer();
+                yield return new WaitForSeconds(1.5f); // 等待敌人行动完成
             }
         }
 

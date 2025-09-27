@@ -50,14 +50,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPoint: {x: 5, y: 4}
   startGrid: {fileID: 0}
-  moveRange: 3
+  moveRange: 6
   moveSpeed: 2
-  detectRange: 3
-  player: {fileID: 0}
+  targetPlayer: {fileID: 0}
   healthSystem: {fileID: 0}
-  maxHealth: 10
+  maxHealth: 15
   currentHealth: 0
-  attackDamage: 2
+  attackDamage: 5
 --- !u!114 &5695332646528642167
 MonoBehaviour:
   m_ObjectHideFlags: 0

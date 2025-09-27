@@ -15,8 +15,6 @@ public class HorizontalCardHolder : MonoBehaviour
     [SerializeField] private GameObject slotPrefab;
     private RectTransform rect;
 
-    [Header("Spawn Settings")]
-    [SerializeField] private int cardsToSpawn = 7;
     public List<Card> cards;
 
     [Header("Card Draw Settings")]
@@ -25,11 +23,9 @@ public class HorizontalCardHolder : MonoBehaviour
     bool isCrossing = false;
     [SerializeField] private bool tweenCardReturn = true;
 
-    [Header("Card Types")]
-    [SerializeField] private List<CardData> availableCardTypes;  // Assign in Inspector: Your deck of card prototypes.
     [Header("起始手牌数量")]
     [SerializeField] private int startingHandSize = 5;
-
+    public bool isDraging=false;
     void Start()
     {
         DeckManager.instance.Shuffle(DeckManager.instance.deck);
@@ -212,7 +208,7 @@ public class HorizontalCardHolder : MonoBehaviour
         if (card == null) return;
 
         // 检查行动点
-        if (TurnManager.instance.actionPoints <= 0)
+        if (TurnManager.instance.currentController.actionPoints <= 0)
         {
             Debug.Log("没有行动点，无法出牌！");
             return;
@@ -225,27 +221,34 @@ public class HorizontalCardHolder : MonoBehaviour
             return;
         }
 
-        // 消耗行动点
-        TurnManager.instance.actionPoints--;
-        TurnManager.instance.actionPointText.text = "Action Point: " + TurnManager.instance.actionPoints;
-        Debug.Log($"使用卡牌：{card.data.cardName}，剩余行动点：{TurnManager.instance.actionPoints}");
-
+        TurnManager.instance.currentController.UseActionPoint(1);
         // 丢进弃牌堆
         DeckManager.instance.Discard(card.data);
 
         // 移除手牌
         cards.Remove(card);
-        Destroy(card.transform.parent.gameObject);
 
+        StartCoroutine(PlayerAnimation());
+        Destroy(card.transform.parent.gameObject);
+        StartCoroutine(DrawNewCard());
         // 更新显示
         foreach (var c in cards)
             if (c.cardVisual != null)
                 c.cardVisual.UpdateIndex(transform.childCount);
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
+        
     }
 
+    private IEnumerator PlayerAnimation()
+    {
+        // TODO: 根据 card.data.effectType 播放不同的动画
+        Debug.Log($"播放 动画...");
 
+        // 先留个假延时模拟动画
+        yield return new WaitForSeconds(0.5f);
 
-
+        // 动画结束后的逻辑（如果有）
+        Debug.Log("动画播放完成");
+    }
 }

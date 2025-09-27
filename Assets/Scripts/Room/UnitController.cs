@@ -23,14 +23,25 @@ public class UnitController : MonoBehaviour
 
     public Vector2Int currentGridPos; // ��ҵ�ǰ����λ��
 
+    public int maxActionPoints = 3;   // 每回合初始行动点
+    public int actionPoints;          // 当前行动点
 
     public float shield = 0f;      // ����ֵ
+
+    public bool isMoving = false;
+
+    public SpriteRenderer sr;
+
+    public bool isActive = false;
     private void Start()
     {
+        sr = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        currentGridPos = startPoint;
         if (IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y) != null)
         {
             startGrid = IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y);
             startGrid.GetComponent<GameGrid>().isOccupied = true;
+            startGrid.GetComponent<GameGrid>().occupiedPlayer = this;
             transform.SetParent(startGrid.transform);
             transform.localPosition = Vector3.zero;
             IsoGrid2D.instance.currentPlayerGrid = startGrid.GetComponent<GameGrid>();
@@ -45,16 +56,23 @@ public class UnitController : MonoBehaviour
 
     private void Update()
     {
+        if (isActive == false) return;
+        if (transform.childCount == 0) return; // 防止没子物件时报错
 
+        
     }
+
 
     public void Move()
     {
+        if (actionPoints <= 0) return;
         IsoGrid2D.instance.HighlightMoveRange(startPoint, moveRange);
     }
 
     public void MoveToGrid(GameGrid targetGrid)
     {
+        if (actionPoints <= 0) return;
+        UseActionPoint(1);
         string[] nameParts = targetGrid.gameObject.name.Split('_');
         Vector2Int targetPos = new Vector2Int(int.Parse(nameParts[1]), int.Parse(nameParts[2]));
 
@@ -64,13 +82,13 @@ public class UnitController : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(FollowPath(path));
             IsoGrid2D.instance.ClearHighlight();
-            
         }
         
     }
 
     private System.Collections.IEnumerator FollowPath(List<GameGrid> path)
     {
+        isMoving = true;
         // ���ͷ���ʼ����
         if (startGrid != null)
             startGrid.GetComponent<GameGrid>().isOccupied = false;
@@ -88,12 +106,16 @@ public class UnitController : MonoBehaviour
 
             transform.position = targetPos;
 
-            // ---- ���¸���ռ�� ----
             if (startGrid != null)
-                startGrid.GetComponent<GameGrid>().isOccupied = false;  // ��վɵ�
+            {
+                var oldGrid = startGrid.GetComponent<GameGrid>();
+                oldGrid.isOccupied = false;
+                oldGrid.occupiedPlayer = null; // 清空旧格子上的玩家
+            }
 
-            grid.isOccupied = true;  // ռ���µ�
-            startGrid = grid.gameObject;  // ���µ�ǰ����
+            grid.isOccupied = true;
+            grid.occupiedPlayer = this; // 让格子记录当前玩家
+            startGrid = grid.gameObject;
 
             // ��������
             string[] nameParts = grid.name.Split('_');
@@ -108,6 +130,8 @@ public class UnitController : MonoBehaviour
             transform.SetParent(grid.transform);
             transform.localPosition = Vector3.zero; // ��֤����
         }
+        isMoving = false;
+        Move();
     }
 
     public void TakeDamage(float amount)
@@ -117,6 +141,8 @@ public class UnitController : MonoBehaviour
             Debug.Log($"{name} 闪避了这次攻击！");
             return;
         }
+        FindObjectOfType<CameraShake>().Shake();
+
 
         if (shield > 0)
         {
@@ -201,6 +227,47 @@ public class UnitController : MonoBehaviour
         // ���ø��ӹ�ϵ��˲�Ƶ���������
         transform.SetParent(targetGrid.transform);
         transform.localPosition = Vector3.zero;
+    }
+
+    public void UseActionPoint(int usePoint)
+    {
+        if (TurnManager.instance.currentController == this)
+        {
+            actionPoints-=usePoint;
+            TurnManager.instance.actionPointText.text = "[" + gameObject.name + "]" + "Action Point: " + actionPoints;
+        }
+        TurnManager.instance.actionPointText.text = "Action Point: " + TurnManager.instance.currentController.actionPoints;
+        Debug.Log($"剩余行动点：{TurnManager.instance.currentController.actionPoints}");
+        if (actionPoints <= 0)
+        {
+            // 半透明
+            Color c = sr.color;
+            c.a = 0.75f;
+            sr.color = c;
+        }
+    }
+
+    public void RecoverActionPoint()
+    {
+        sr = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        actionPoints = maxActionPoints;
+        TurnManager.instance.actionPointText.text = "Action Point: " + TurnManager.instance.currentController.actionPoints;
+        Color c = sr.color;
+        c.a = 1f;
+        sr.color = c;
+    }
+
+    public void SetActionPoint(int actionPoint)
+    {
+        actionPoints = actionPoint;
+        TurnManager.instance.actionPointText.text = "Action Point: " + TurnManager.instance.currentController.actionPoints;
+        if (actionPoints <= 0)
+        {
+            // 半透明
+            Color c = sr.color;
+            c.a = 0.75f;
+            sr.color = c;
+        }
     }
 
 }

@@ -1,18 +1,24 @@
+using DG.Tweening;   // 别忘了引入 DOTween 命名空间
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 public class GameGrid : MonoBehaviour
 {
     public Vector2Int gridPos;
     private SpriteRenderer rend;
     private Color originalColor;
     public Color hoverColor = Color.green;
-    public Color moveRangeColor = new Color(1f, 0.5f, 0f); // 橙色
-    public bool isInRange=false;
+    public Color moveRangeColor = new Color(1f, 0.5f, 0f,0.5f); // 橙色
+    public bool isInRange = false;
 
     public SpriteRenderer selectGrid;
     public bool isAttackTarget = false;
     public bool isOccupied = false;
 
+    public UnitController occupiedPlayer;
+    public EnemyUnit currentEnemy;
+    public bool isInterable = false; // 是否可交互
+
+    public Color interactColor = Color.blue; // 可交互格子颜色
     void Start()
     {
         rend = GetComponent<SpriteRenderer>();
@@ -22,18 +28,31 @@ public class GameGrid : MonoBehaviour
 
     void OnMouseEnter()
     {
-        //rend.color = hoverColor;
         selectGrid.enabled = true;
         IsoGrid2D.instance.currentSelectedGrid = this;
-        //HandManager.instance.SetCurrentHoverGrid(this);
+
+        // 如果有玩家站在格子上，做一个放大缩小动画
+        if (occupiedPlayer != null)
+        {
+            Transform playerTransform = occupiedPlayer.transform;
+
+            // 先杀掉可能还在跑的 scale 动画，避免叠加
+            playerTransform.DOKill();
+
+            // 保存原始缩放
+            Vector3 originalScale = playerTransform.localScale;
+
+            // 放大到1.2倍，再回到原始大小
+            playerTransform.DOScale(originalScale * 1.1f, 0.1f)
+                .SetLoops(2, LoopType.Yoyo) // 往返两次
+                .SetEase(Ease.OutQuad);
+        }
     }
 
     void OnMouseExit()
     {
-        //rend.color = originalColor;
         selectGrid.enabled = false;
         IsoGrid2D.instance.currentSelectedGrid = null;
-        //HandManager.instance.ClearCurrentHoverGrid(this);
     }
 
     // 外部调用改变格子颜色
@@ -50,18 +69,27 @@ public class GameGrid : MonoBehaviour
 
     void OnMouseDown()
     {
-
+        //if (EventSystem.current.IsPointerOverGameObject()) return;
         UnitController player = FindObjectOfType<UnitController>();
 
         if (isInRange) // 移动
         {
-            player.MoveToGrid(this);
+            UnitController playerToAction = IsoGrid2D.instance.controller.GetComponent<UnitController>();
+            playerToAction.MoveToGrid(this);
         }
         else if (isAttackTarget) // 攻击
         {
-            player.Attack(this);
+            IsoGrid2D.instance.controller.GetComponent<UnitController>().Attack(this);
             IsoGrid2D.instance.ClearHighlight();
         }
+        else
+        {
+            if(occupiedPlayer != null)
+            {
+                
+                TurnManager.instance.ChangePlayer(occupiedPlayer);
+                
+            }
+        }
     }
-
 }
