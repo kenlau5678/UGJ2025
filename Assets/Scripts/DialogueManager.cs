@@ -1,171 +1,170 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
-    /// <summary>
-    /// 对话内容文本，csv格式
-    /// </summary> 
+    [Header("对话数据")]
     public TextAsset dialogDataFile;
 
-    /// <summary>
-    /// 左侧角色图像
-    /// </summary>
-    public SpriteRenderer spriteLeft;
-    /// <summary>
-    /// 右侧角色图像
-    /// </summary>
-    public SpriteRenderer spriteRight;
-
-    /// <summary>
-    /// 角色名字文本
-    /// </summary>
-    public TMP_Text nameText;
-
-    /// <summary>
-    /// 对话内容文本
-    /// </summary>
-    public TMP_Text dialogText;
-
-    /// <summary>
-    /// 角色图片列表
-    /// </summary>
-    public List<Sprite> sprites = new List<Sprite>();
-
-    /// <summary>
-    /// 角色名字对应图片的字典
-    /// </summary>
-    Dictionary<string, Sprite> imageDic = new Dictionary<string, Sprite>();
-
-    /// <summary>
-    /// 当前对话索引值
-    /// </summary>
-    public int dialogIndex;
-
-    /// <summary>
-    /// 对话文本按行分割
-    /// </summary>
-    public string[] dialogRows;
-
-    /// <summary>
-    /// 继续按钮
-    /// </summary>
-    public Button next;
-
-    /// <summary>
-    /// 选项按钮
-    /// </summary>
-    public GameObject optionButton;
-    /// <summary>
-    /// 选项按钮父节点
-    /// </summary>
+    [Header("UI")]
+    public Image spriteLeft;
+    public Image spriteRight;
+    public Text nameText;
+    public Text dialogText;
+    public Button nextButton;
+    public GameObject optionButtonPrefab;
     public Transform buttonGroup;
 
-    // Start is called before the first frame update
+    [Header("角色立绘")]
+    public List<Sprite> sprites;
+    private Dictionary<string, Sprite> imageDic = new Dictionary<string, Sprite>();
+
+    // 对话数据
+    private Dictionary<int, List<DialogueLine>> dialogueDic = new Dictionary<int, List<DialogueLine>>();
+    public int currentID = 1;
+
     private void Awake()
     {
+        // 假设 sprites[0] = 医生, sprites[1] = 弗兰 ...
         imageDic["医生"] = sprites[0];
         imageDic["弗兰"] = sprites[1];
     }
 
-    void Start()
+    private void Start()
     {
-        ReadText(dialogDataFile);
-        ShowDiaLogRow();
+        LoadCSV(dialogDataFile);
+        ShowDialogue(currentID);
     }
 
-    // 更新文本信息
-    public void UpdateText(string _name, string _text)
+    void LoadCSV(TextAsset csvFile)
     {
-        nameText.text = _name;
-        dialogText.text = _text;
-    }
+        dialogueDic.Clear(); // 先清空，避免多次加载出错
 
-    // 更新图片信息
-    public void UpdateImage(string _name, string _position)
-    {
-        if (_position == "左")
+        string[] lines = csvFile.text.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+        bool hasHeader = false;
+
+        foreach (string rawLine in lines)
         {
-            spriteLeft.sprite = imageDic[_name];
+            string line = rawLine.Trim(); // 去掉前后空格和 \r
+            if (string.IsNullOrEmpty(line)) continue;
+
+            // 判断是不是表头（第一行包含 "ID" 或 "Type" 就跳过）
+            if (!hasHeader && (line.Contains("ID") || line.Contains("Type")))
+            {
+                hasHeader = true;
+                continue;
+            }
+
+            // 支持中英文逗号 / 分号
+            string[] cells = line.Split(',');
+            if (cells.Length < 2) continue;
+
+            DialogueLine dia = new DialogueLine(cells);
+
+            if (!dialogueDic.ContainsKey(dia.ID))
+                dialogueDic[dia.ID] = new List<DialogueLine>();
+
+            dialogueDic[dia.ID].Add(dia);
+
+            Debug.Log($"解析成功 → ID:{dia.ID}, Speaker:{dia.Speaker}, Pos:{dia.Position}, Text:{dia.Text}, Next:{dia.NextID}");
         }
-        else if (_position == "右")
-        {
-            spriteRight.sprite = imageDic[_name];
-        }
+
+        Debug.Log($"CSV 读取完成，共载入 {dialogueDic.Count} 个对话节点");
     }
 
-    public void ReadText(TextAsset _textAsset)
+
+    void ShowDialogue(int id)
     {
-        dialogRows = _textAsset.text.Split('\n'); // 以换行来分割
-        Debug.Log("读取成果");
-    }
-
-    public void ShowDiaLogRow()
-    {
-        for (int i = 0; i < dialogRows.Length; i++)
+        if (!dialogueDic.ContainsKey(id))
         {
-            string[] cells = dialogRows[i].Split(',');
+            Debug.LogWarning($"未找到对话 ID {id}");
+            return;
+        }
 
-            if (cells[0] == "#" && int.Parse(cells[1]) == dialogIndex)
-            {
-                UpdateText(cells[2], cells[4]);
-                UpdateImage(cells[2], cells[3]);
+        for (int i = buttonGroup.childCount - 1; i >= 0; i--)
+        {
+            var child = buttonGroup.GetChild(i).gameObject;
+            if (child != optionButtonPrefab) // 避免误删原始 prefab
+                Destroy(child);
+        }
 
-                dialogIndex = int.Parse(cells[5]);
-                next.gameObject.SetActive(true);
-                break;
-            }
-            else if (cells[0] == "@" && int.Parse(cells[1]) == dialogIndex)
+
+        List<DialogueLine> lines = dialogueDic[id];
+        DialogueLine first = lines[0];
+
+        if (first.Type == "end")
+        {
+            Debug.Log("剧情结束");
+            nextButton.gameObject.SetActive(false);
+            return;
+        }
+        else if (first.Type == "#") // 普通对话
+        {
+            UpdateUI(first);
+            currentID = first.NextID;
+            nextButton.gameObject.SetActive(true);
+        }
+        else if (first.Type == "@") // 选项
+        {
+            nextButton.gameObject.SetActive(false);
+            foreach (DialogueLine option in lines)
             {
-                next.gameObject.SetActive(false); // 隐藏原来的按钮
-                GenerateOption(i);
-            }
-            else if (cells[0] == "end" && int.Parse(cells[1]) == dialogIndex)
-            {
-                Debug.Log("剧情结束"); // 这里结束
-                next.gameObject.SetActive(false); // 隐藏“下一步”按钮
-                return; // 直接退出
+                GameObject btn = Instantiate(optionButtonPrefab, buttonGroup);
+                btn.GetComponentInChildren<Text>().text = option.Text; // 注意这里用 Text
+                btn.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    currentID = option.NextID;
+                    ShowDialogue(currentID);
+                });
             }
         }
     }
+
+    void UpdateUI(DialogueLine line)
+    {
+        nameText.text = line.Speaker;
+        dialogText.text = line.Text;
+
+        // 默认隐藏两边
+        spriteLeft.gameObject.SetActive(false);
+        spriteRight.gameObject.SetActive(false);
+
+        if (line.Position == "左" && imageDic.ContainsKey(line.Speaker))
+        {
+            spriteLeft.sprite = imageDic[line.Speaker];
+            spriteLeft.gameObject.SetActive(true);
+        }
+        else if (line.Position == "右" && imageDic.ContainsKey(line.Speaker))
+        {
+            spriteRight.sprite = imageDic[line.Speaker];
+            spriteRight.gameObject.SetActive(true);
+        }
+    }
+
 
     public void OnClickNext()
     {
-        ShowDiaLogRow();
+        ShowDialogue(currentID);
     }
+}
 
-    public void GenerateOption(int _index) // 生成按钮
+public class DialogueLine
+{
+    public string Type;     // # / @ / end
+    public int ID;
+    public string Speaker;
+    public string Position;
+    public string Text;
+    public int NextID;
+
+    public DialogueLine(string[] cells)
     {
-        if (_index >= dialogRows.Length) return; // 防止数组越界
-
-        string[] cells = dialogRows[_index].Split(',');
-        if (cells[0] == "@")
-        {
-            GameObject button = Instantiate(optionButton, buttonGroup);
-
-            // 绑定按钮事件
-            button.GetComponentInChildren<TMP_Text>().text = cells[4];
-            button.GetComponent<Button>().onClick.AddListener(delegate
-            {
-                OnOptionClick(int.Parse(cells[5]));
-            });
-
-            GenerateOption(_index + 1); // 递归生成下一个选项
-        }
-    }
-
-    public void OnOptionClick(int _id)
-    {
-        dialogIndex = _id;
-        ShowDiaLogRow();
-
-        // 清空旧按钮
-        for (int i = 0; i < buttonGroup.childCount; i++)
-        {
-            Destroy(buttonGroup.GetChild(i).gameObject);
-        }
+        Type = cells[0].Trim();
+        int.TryParse(cells[1].Trim(), out ID);
+        Speaker = cells[2].Trim();
+        Position = cells[3].Trim();
+        Text = cells[4].Trim();
+        int.TryParse(cells[5].Trim(), out NextID);
     }
 }

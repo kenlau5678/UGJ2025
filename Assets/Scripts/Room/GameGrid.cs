@@ -69,7 +69,7 @@ public class GameGrid : MonoBehaviour
 
     void OnMouseDown()
     {
-        //if (EventSystem.current.IsPointerOverGameObject()) return;
+        if (EventSystem.current.IsPointerOverGameObject()) return;
         UnitController player = FindObjectOfType<UnitController>();
 
         if (isInRange) // ÒÆ¶¯
