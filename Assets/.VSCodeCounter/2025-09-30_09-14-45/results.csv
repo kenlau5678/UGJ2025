@@ -1,0 +1,97 @@
+"filename", "language", "UnityShader", "C#", "JSON", "XML", "Markdown", "comment", "blank", "total"
+"d:\Tuanjie Projects\UGJ2025\Assets\ItemInGrid.cs", "C#", 0, 68, 0, 0, 0, 2, 11, 81
+"d:\Tuanjie Projects\UGJ2025\Assets\Plugins\Demigiant\DOTween\DOTween.XML", "XML", 0, 0, 0, 3089, 0, 0, 1, 3090
+"d:\Tuanjie Projects\UGJ2025\Assets\Plugins\Demigiant\DOTween\Editor\DOTweenEditor.XML", "XML", 0, 0, 0, 144, 0, 0, 1, 145
+"d:\Tuanjie Projects\UGJ2025\Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleAudio.cs", "C#", 0, 94, 0, 0, 0, 80, 25, 199
+"d:\Tuanjie Projects\UGJ2025\Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleEPOOutline.cs", "C#", 0, 109, 0, 0, 0, 18, 20, 147
+"d:\Tuanjie Projects\UGJ2025\Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModulePhysics.cs", "C#", 0, 137, 0, 0, 0, 60, 20, 217
+"d:\Tuanjie Projects\UGJ2025\Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModulePhysics2D.cs", "C#", 0, 125, 0, 0, 0, 51, 18, 194
+"d:\Tuanjie Projects\UGJ2025\Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleSprite.cs", "C#", 0, 63, 0, 0, 0, 17, 14, 94
+"d:\Tuanjie Projects\UGJ2025\Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleUI.cs", "C#", 0, 390, 0, 0, 0, 203, 70, 663
+"d:\Tuanjie Projects\UGJ2025\Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleUnityVersion.cs", "C#", 0, 254, 0, 0, 0, 99, 37, 390
+"d:\Tuanjie Projects\UGJ2025\Assets\Plugins\Demigiant\DOTween\Modules\DOTweenModuleUtils.cs", "C#", 0, 123, 0, 0, 0, 27, 18, 168
+"d:\Tuanjie Projects\UGJ2025\Assets\SDF Toolkit\Editor\SDFTextureGeneratorWindow.cs", "C#", 0, 156, 0, 0, 0, 10, 26, 192
+"d:\Tuanjie Projects\UGJ2025\Assets\SDF Toolkit\SDFTextureGenerator.cs", "C#", 0, 268, 0, 0, 0, 124, 25, 417
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\.VSCodeCounter\2025-09-26_11-07-53\details.md", "Markdown", 0, 0, 0, 0, 41, 0, 6, 47
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\.VSCodeCounter\2025-09-26_11-07-53\diff-details.md", "Markdown", 0, 0, 0, 0, 9, 0, 6, 15
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\.VSCodeCounter\2025-09-26_11-07-53\diff.md", "Markdown", 0, 0, 0, 0, 12, 0, 7, 19
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\.VSCodeCounter\2025-09-26_11-07-53\results.json", "JSON", 0, 0, 1, 0, 0, 0, 0, 1
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\.VSCodeCounter\2025-09-26_11-07-53\results.md", "Markdown", 0, 0, 0, 0, 21, 0, 7, 28
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Audio\AudioManager.cs", "C#", 0, 100, 0, 0, 0, 2, 20, 122
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Audio\Sound.cs", "C#", 0, 9, 0, 0, 0, 0, 3, 12
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\CameraMove.cs", "C#", 0, 64, 0, 0, 0, 14, 12, 90
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\CameraShake.cs", "C#", 0, 39, 0, 0, 0, 4, 11, 54
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Card.cs", "C#", 0, 222, 0, 0, 0, 13, 59, 294
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\CardData\CardData.cs", "C#", 0, 34, 0, 0, 0, 5, 8, 47
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\CardForShow.cs", "C#", 0, 47, 0, 0, 0, 2, 11, 60
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\CardVisual.cs", "C#", 0, 221, 0, 0, 0, 3, 50, 274
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\CollectionManager.cs", "C#", 0, 34, 0, 0, 0, 2, 5, 41
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\CutoffMaskUI.cs", "C#", 0, 17, 0, 0, 0, 0, 2, 19
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\DeckManager.cs", "C#", 0, 65, 0, 0, 0, 17, 12, 94
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\DialogueManager.cs", "C#", 0, 136, 0, 0, 0, 5, 30, 171
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\EndPanel.cs", "C#", 0, 37, 0, 0, 0, 4, 8, 49
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\HorizontalCardHolder.cs", "C#", 0, 190, 0, 0, 0, 14, 50, 254
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Map\LevelSelectRoot.cs", "C#", 0, 19, 0, 0, 0, 1, 3, 23
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Map\MapGrid.cs", "C#", 0, 58, 0, 0, 0, 4, 11, 73
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Map\MapGridManager.cs", "C#", 0, 103, 0, 0, 0, 3, 25, 131
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Map\PlayerInMap.cs", "C#", 0, 177, 0, 0, 0, 6, 28, 211
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\PanelManager.cs", "C#", 0, 67, 0, 0, 0, 2, 12, 81
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\PlayerSwitchManager.cs", "C#", 0, 123, 0, 0, 0, 9, 31, 163
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Room\EnemyUnit.cs", "C#", 0, 160, 0, 0, 0, 14, 38, 212
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Room\GameGrid.cs", "C#", 0, 74, 0, 0, 0, 6, 16, 96
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Room\GridNode.cs", "C#", 0, 16, 0, 0, 0, 0, 3, 19
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Room\HealthSystem.cs", "C#", 0, 46, 0, 0, 0, 9, 12, 67
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Room\IsoGrid2D.cs", "C#", 0, 343, 0, 0, 0, 21, 78, 442
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Room\UnitController.cs", "C#", 0, 213, 0, 0, 0, 13, 48, 274
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\ShaderCode.cs", "C#", 0, 45, 0, 0, 0, 8, 14, 67
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\Store.cs", "C#", 0, 24, 0, 0, 0, 2, 8, 34
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\TurnManager.cs", "C#", 0, 117, 0, 0, 0, 6, 24, 147
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\VisualCardsHandler.cs", "C#", 0, 17, 0, 0, 0, 2, 7, 26
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\_SciptableObjects\CurveParameters.cs", "C#", 0, 9, 0, 0, 0, 0, 2, 11
+"d:\Tuanjie Projects\UGJ2025\Assets\Scripts\_Utility\ExtensionMethods.cs", "C#", 0, 7, 0, 0, 0, 0, 2, 9
+"d:\Tuanjie Projects\UGJ2025\Assets\ShaderGraph\sdfOutline.shader", "UnityShader", 76, 0, 0, 0, 0, 2, 17, 95
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\Blur.shader", "UnityShader", 63, 0, 0, 0, 0, 3, 10, 76
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\ColorSwap.shader", "UnityShader", 54, 0, 0, 0, 0, 0, 10, 64
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\Fade.shader", "UnityShader", 50, 0, 0, 0, 0, 0, 12, 62
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\FadeController.cs", "C#", 0, 35, 0, 0, 0, 0, 5, 40
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\Ghost.shader", "UnityShader", 44, 0, 0, 0, 0, 1, 10, 55
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\Glitch.shader", "UnityShader", 44, 0, 0, 0, 0, 16, 11, 71
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\Glow.shader", "UnityShader", 63, 0, 0, 0, 0, 0, 15, 78
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\Gradient.shader", "UnityShader", 51, 0, 0, 0, 0, 1, 9, 61
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\Hologram.shader", "UnityShader", 57, 0, 0, 0, 0, 1, 11, 69
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\HueShift.shader", "UnityShader", 52, 0, 0, 0, 0, 1, 10, 63
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\InnerOutline.shader", "UnityShader", 49, 0, 0, 0, 0, 3, 12, 64
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\Outline.shader", "UnityShader", 72, 0, 0, 0, 0, 4, 21, 97
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\Pixel.shader", "UnityShader", 42, 0, 0, 0, 0, 2, 8, 52
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\Shadow.shader", "UnityShader", 42, 0, 0, 0, 0, 1, 8, 51
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\Shine.shader", "UnityShader", 53, 0, 0, 0, 0, 0, 10, 63
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\Color\TikTok.shader", "UnityShader", 41, 0, 0, 0, 0, 6, 9, 56
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\UV\Distortion.shader", "UnityShader", 49, 0, 0, 0, 0, 1, 9, 59
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\UV\Fill.shader", "UnityShader", 46, 0, 0, 0, 0, 4, 9, 59
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\UV\FishEye.shader", "UnityShader", 44, 0, 0, 0, 0, 0, 9, 53
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\UV\HandDrawn.shader", "UnityShader", 43, 0, 0, 0, 0, 0, 8, 51
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\UV\Pinch.shader", "UnityShader", 41, 0, 0, 0, 0, 6, 10, 57
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\UV\Scroll.shader", "UnityShader", 40, 0, 0, 0, 0, 1, 8, 49
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\UV\Shake.shader", "UnityShader", 42, 0, 0, 0, 0, 0, 8, 50
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\UV\Twist.shader", "UnityShader", 48, 0, 0, 0, 0, 2, 9, 59
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\UV\Wave.shader", "UnityShader", 47, 0, 0, 0, 0, 4, 9, 60
+"d:\Tuanjie Projects\UGJ2025\Assets\Shader\Scripts\UV\Zoom.shader", "UnityShader", 42, 0, 0, 0, 0, 0, 8, 50
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader", "UnityShader", 109, 0, 0, 0, 0, 2, 33, 144
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader", "UnityShader", 112, 0, 0, 0, 0, 3, 31, 146
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader", "UnityShader", 109, 0, 0, 0, 0, 2, 33, 144
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader", "UnityShader", 243, 0, 0, 0, 0, 4, 71, 318
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader", "UnityShader", 241, 0, 0, 0, 0, 4, 66, 311
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader", "UnityShader", 188, 0, 0, 0, 0, 10, 50, 248
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader", "UnityShader", 183, 0, 0, 0, 0, 8, 50, 241
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader", "UnityShader", 82, 0, 0, 0, 0, 4, 21, 107
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader", "UnityShader", 183, 0, 0, 0, 0, 8, 50, 241
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader", "UnityShader", 103, 0, 0, 0, 0, 8, 28, 139
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader", "UnityShader", 122, 0, 0, 0, 0, 4, 33, 159
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_SDF.shader", "UnityShader", 243, 0, 0, 0, 0, 4, 71, 318
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMP_Sprite.shader", "UnityShader", 97, 0, 0, 0, 0, 0, 20, 117
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMPro.cginc", "UnityShader", 63, 0, 0, 0, 0, 2, 20, 85
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc", "UnityShader", 122, 0, 0, 0, 0, 2, 34, 158
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc", "UnityShader", 62, 0, 0, 0, 0, 10, 14, 86
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc", "UnityShader", 76, 0, 0, 0, 0, 7, 19, 102
+"d:\Tuanjie Projects\UGJ2025\Assets\TextMesh Pro\Sprites\EmojiOne.json", "JSON", 0, 0, 155, 0, 0, 0, 2, 157
+"Total", "-", 3633, 4655, 156, 3233, 83, 1023, 1876, 14659
