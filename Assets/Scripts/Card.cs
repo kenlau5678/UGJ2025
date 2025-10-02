@@ -237,6 +237,11 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                     {
                         // TODO: 在 HighlightAttackRange 里找到目标后，对敌人调用 TakeDamage(data.amount)
                         playerUnit.attackDamage = data.amount;
+                        if (data.attackAttribute == CardData.AttackAttribute.MultipleDamage)
+                        {
+                            playerUnit.isNextAttackMultiple = true;
+                            playerUnit.SegmentCount = data.SegmentCount;
+                        }
                         effectExecuted = true;
                         Debug.Log($"近战攻击，造成 {data.amount} 点伤害！");
                     }
@@ -252,6 +257,11 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                     {
                         // TODO: 在 HighlightRangedAttackRange 里找到目标后，对敌人调用 TakeDamage(data.amount)
                         playerUnit.attackDamage = data.amount;
+                        if(data.attackAttribute == CardData.AttackAttribute.Dizziness)
+                        {
+                            playerUnit.isNextAttackDizziness = true;
+                        }
+                        
                         effectExecuted = true;
                         Debug.Log($"远程攻击（{data.attackAttribute}），造成 {data.amount} 点伤害！");
                     }
@@ -279,6 +289,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                 effectExecuted = true;
                 Debug.Log($"切换");
                 break;
+            
             default:
                 Debug.LogWarning("No effect defined for this card type.");
                 break;

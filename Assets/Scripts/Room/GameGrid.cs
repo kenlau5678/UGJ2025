@@ -1,6 +1,7 @@
 using DG.Tweening;   // 别忘了引入 DOTween 命名空间
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections;
 public class GameGrid : MonoBehaviour
 {
     public Vector2Int gridPos;
@@ -69,7 +70,7 @@ public class GameGrid : MonoBehaviour
 
     void OnMouseDown()
     {
-        //if (EventSystem.current.IsPointerOverGameObject()) return;
+        if (EventSystem.current.IsPointerOverGameObject()) return;
         UnitController player = FindObjectOfType<UnitController>();
 
         if (isInRange) // 移动
@@ -79,7 +80,19 @@ public class GameGrid : MonoBehaviour
         }
         else if (isAttackTarget) // 攻击
         {
-            IsoGrid2D.instance.controller.GetComponent<UnitController>().Attack(this);
+            
+            if(IsoGrid2D.instance.controller.GetComponent<UnitController>().isNextAttackDizziness == true)
+            {
+                this.currentEnemy.Dizziness();
+                IsoGrid2D.instance.controller.GetComponent<UnitController>().Attack(this);
+                IsoGrid2D.instance.controller.GetComponent<UnitController>().isNextAttackDizziness = false;
+            }
+            if (IsoGrid2D.instance.controller.GetComponent<UnitController>().isNextAttackMultiple == true)
+            {
+                StartCoroutine(AttackMultiple());
+                IsoGrid2D.instance.controller.GetComponent<UnitController>().isNextAttackMultiple = false;
+            }
+
             IsoGrid2D.instance.ClearHighlight();
         }
         else
@@ -92,4 +105,16 @@ public class GameGrid : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator AttackMultiple()
+    {
+        var unitController = IsoGrid2D.instance.controller.GetComponent<UnitController>();
+
+        for (int i = 0; i < unitController.SegmentCount; i++)
+        {
+            unitController.Attack(this);
+            yield return new WaitForSeconds(0.2f); // 等待 0.4 秒再继续
+        }
+    }
+
 }
