@@ -39,6 +39,9 @@ public class UnitController : MonoBehaviour
     public int SegmentCount = 0;
 
     public bool isNextAttackBloodSucking = false;
+
+    public bool isNextAttackPull = false;
+    public int PullDistance = 0;
     private void Start()
     {
         sr = transform.GetChild(0).GetComponent<SpriteRenderer>();
