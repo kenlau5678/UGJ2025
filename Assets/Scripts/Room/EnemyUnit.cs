@@ -16,9 +16,12 @@ public class EnemyUnit : MonoBehaviour
     public float currentHealth;
 
     public float attackDamage = 2f;
+    public bool isDizziness;
 
+    public SpriteRenderer sr;
     private void Start()
     {
+        sr = transform.GetChild(0).GetComponent<SpriteRenderer>();
         // 初始化敌人的位置
         if (IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y) != null)
         {
@@ -208,4 +211,17 @@ public class EnemyUnit : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void Dizziness()
+    {
+        isDizziness = true;
+        Color c = Color.blue;
+        sr.color = c;
+    }
+
+    public void Recover()
+    {
+        isDizziness = false;
+        Color c = Color.white;
+        sr.color = c;
+    }
 }

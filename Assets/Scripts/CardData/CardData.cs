@@ -8,7 +8,7 @@ public class CardData : ScriptableObject
     public Sprite cardSprite;        // 卡牌图片
     public GameObject visualPrefab;  // 可选自定义预制体
     public int manaCost;             // 消耗魔法值
-
+    
     public CardEffectType effectType;
 
     // 对应数值，根据 effectType 作用不同
@@ -18,7 +18,9 @@ public class CardData : ScriptableObject
     // 远程攻击专用参数
     [Header("Ranged Attack Settings")]
     public int attackRange = 0;   // 远程攻击范围（格子数）
+
     public AttackAttribute attackAttribute = AttackAttribute.None;
+    public int SegmentCount = 0;
 
     // Enum for simple effects
     public enum CardEffectType
@@ -28,7 +30,7 @@ public class CardData : ScriptableObject
         Heal,           // 治疗，使用 amount
         RemoteAttack,    // 远程攻击，使用 amount + attackRange
         Shield,
-        Switch
+        Switch,
     }
 
     // 攻击属性（可扩展）
@@ -38,7 +40,9 @@ public class CardData : ScriptableObject
         Fire,
         Ice,
         Poison,
-        Lightning
+        Lightning,
+        Dizziness,
+        MultipleDamage
     }
 
     // Optional: Delegate for custom effects

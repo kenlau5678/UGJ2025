@@ -33,6 +33,10 @@ public class UnitController : MonoBehaviour
     public SpriteRenderer sr;
 
     public bool isActive = false;
+
+    public bool isNextAttackDizziness = false;
+    public bool isNextAttackMultiple = false;
+    public int SegmentCount = 0;
     private void Start()
     {
         sr = transform.GetChild(0).GetComponent<SpriteRenderer>();

@@ -137,6 +137,11 @@ public class TurnManager : MonoBehaviour
         {
             if (enemy != null)
             {
+                if(enemy.isDizziness == true)
+                {
+                    enemy.Recover();
+                    continue;
+                }
                 enemy.ChasePlayer();
                 yield return new WaitForSeconds(1.5f); // 等待敌人行动完成
             }
