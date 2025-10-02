@@ -37,6 +37,8 @@ public class UnitController : MonoBehaviour
     public bool isNextAttackDizziness = false;
     public bool isNextAttackMultiple = false;
     public int SegmentCount = 0;
+
+    public bool isNextAttackBloodSucking = false;
     private void Start()
     {
         sr = transform.GetChild(0).GetComponent<SpriteRenderer>();
@@ -273,5 +275,15 @@ public class UnitController : MonoBehaviour
             sr.color = c;
         }
     }
-
+    
+    public void SetNextAttackBloodSuck()
+    {
+        isNextAttackBloodSucking = true;
+        sr.color = Color.cyan;
+    }
+    public void RecoverState()
+    {
+        isNextAttackBloodSucking = false;
+        sr.color = Color.white;
+    }
 }

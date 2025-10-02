@@ -191,6 +191,12 @@ public class EnemyUnit : MonoBehaviour
         FindObjectOfType<CameraShake>().Shake();
         healthSystem.SetHealth(currentHealth);
 
+        if(IsoGrid2D.instance.controller.GetComponent<UnitController>().isNextAttackBloodSucking == true)
+        {
+            IsoGrid2D.instance.controller.GetComponent<UnitController>().Heal(amount);
+            IsoGrid2D.instance.controller.GetComponent<UnitController>().RecoverState();
+        }
+
         if (currentHealth <= 0)
         {
             currentHealth = 0;
