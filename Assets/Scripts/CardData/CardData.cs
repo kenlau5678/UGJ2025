@@ -31,6 +31,7 @@ public class CardData : ScriptableObject
         RemoteAttack,    // 远程攻击，使用 amount + attackRange
         Shield,
         Switch,
+        Bloodsucking,
     }
 
     // 攻击属性（可扩展）

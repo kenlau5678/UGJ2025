@@ -64,6 +64,7 @@ public class TurnManager : MonoBehaviour
         foreach (var unitController in unitControllers) 
         {
             unitController.RecoverActionPoint();
+            unitController.RecoverState();
         }
         actionPointText.text = "[" + unitControllers[0].name +"]"+"Action Point: " + unitControllers[0].actionPoints;
         ChangePlayer(unitControllers[0]);

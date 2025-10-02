@@ -277,7 +277,11 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                 }
 
                 break;
-
+            case CardData.CardEffectType.Bloodsucking:
+                playerUnit.SetNextAttackBloodSuck();
+                effectExecuted = true;
+                Debug.Log("BloodSuck");
+                break;
             case CardData.CardEffectType.Shield:
                 
                 playerUnit.AddShield(data.amount); // 使用卡牌定义的治疗数值

@@ -725,7 +725,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9ce2dca3c9a679d4a9b2e8f036efe494, type: 2}
   - {fileID: 11400000, guid: 9ce2dca3c9a679d4a9b2e8f036efe494, type: 2}
   - {fileID: 11400000, guid: 9ce2dca3c9a679d4a9b2e8f036efe494, type: 2}
-  - {fileID: 11400000, guid: 9ce2dca3c9a679d4a9b2e8f036efe494, type: 2}
+  - {fileID: 11400000, guid: 67401622887ff3b4f8ac036cf2cfa610, type: 2}
+  - {fileID: 11400000, guid: 67401622887ff3b4f8ac036cf2cfa610, type: 2}
+  - {fileID: 11400000, guid: 67401622887ff3b4f8ac036cf2cfa610, type: 2}
+  - {fileID: 11400000, guid: 67401622887ff3b4f8ac036cf2cfa610, type: 2}
+  - {fileID: 11400000, guid: ed7596b94f9db0843a1b97c380a3c92b, type: 2}
+  - {fileID: 11400000, guid: ed7596b94f9db0843a1b97c380a3c92b, type: 2}
+  - {fileID: 11400000, guid: ed7596b94f9db0843a1b97c380a3c92b, type: 2}
+  - {fileID: 11400000, guid: ed7596b94f9db0843a1b97c380a3c92b, type: 2}
+  - {fileID: 11400000, guid: db581ccadfe670d47a6251c0a57e6c62, type: 2}
+  - {fileID: 11400000, guid: db581ccadfe670d47a6251c0a57e6c62, type: 2}
+  - {fileID: 11400000, guid: db581ccadfe670d47a6251c0a57e6c62, type: 2}
+  - {fileID: 11400000, guid: db581ccadfe670d47a6251c0a57e6c62, type: 2}
+  - {fileID: 11400000, guid: db581ccadfe670d47a6251c0a57e6c62, type: 2}
   deck: []
 --- !u!4 &324216002
 Transform:
@@ -3450,7 +3462,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1404910885
 RectTransform:
   m_ObjectHideFlags: 0

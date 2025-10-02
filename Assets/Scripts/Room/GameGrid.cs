@@ -92,7 +92,10 @@ public class GameGrid : MonoBehaviour
                 StartCoroutine(AttackMultiple());
                 IsoGrid2D.instance.controller.GetComponent<UnitController>().isNextAttackMultiple = false;
             }
-
+            else
+            {
+                IsoGrid2D.instance.controller.GetComponent<UnitController>().Attack(this);
+            }
             IsoGrid2D.instance.ClearHighlight();
         }
         else
