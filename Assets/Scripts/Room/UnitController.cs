@@ -96,52 +96,70 @@ public class UnitController : MonoBehaviour
     }
 
     private System.Collections.IEnumerator FollowPath(List<GameGrid> path)
+{
+    isMoving = true;
+    if (startGrid != null)
+        startGrid.GetComponent<GameGrid>().isOccupied = false;
+
+    foreach (var grid in path)
     {
-        isMoving = true;
-        // ���ͷ���ʼ����
-        if (startGrid != null)
-            startGrid.GetComponent<GameGrid>().isOccupied = false;
+        Vector3 startPos = transform.position;
+        Vector3 endPos = grid.transform.position;
 
-        foreach (var grid in path)
+        float distance = Vector2.Distance(startPos, endPos);
+        float travelTime = distance / moveSpeed; // 移动时间
+        float elapsed = 0f;
+
+        float jumpHeight = 0.1f; // 跳跃高度，可调
+
+        while (elapsed < travelTime)
         {
-            Vector3 targetPos = grid.transform.position;
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / travelTime);
 
-            // �ƶ���Ŀ�����
-            while ((transform.position - targetPos).sqrMagnitude > 0.01f)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
-                yield return null;
-            }
+            // XY 方向平滑插值（走格子路径）
+            Vector3 basePos = Vector3.Lerp(startPos, endPos, t);
 
-            transform.position = targetPos;
+            // 在 Y 上叠加跳跃（抛物线/正弦曲线都行）
+            float jumpOffset = Mathf.Sin(t * Mathf.PI) * jumpHeight;
 
-            if (startGrid != null)
-            {
-                var oldGrid = startGrid.GetComponent<GameGrid>();
-                oldGrid.isOccupied = false;
-                oldGrid.occupiedPlayer = null; // 清空旧格子上的玩家
-            }
+            transform.position = new Vector3(basePos.x, basePos.y + jumpOffset, basePos.z);
 
-            grid.isOccupied = true;
-            grid.occupiedPlayer = this; // 让格子记录当前玩家
-            startGrid = grid.gameObject;
-
-            // ��������
-            string[] nameParts = grid.name.Split('_');
-            int x = int.Parse(nameParts[1]);
-            int y = int.Parse(nameParts[2]);
-            startPoint = new Vector2Int(x, y);
-            currentGridPos = startPoint;
-
-            IsoGrid2D.instance.currentPlayerGrid = grid.GetComponent<GameGrid>();
-
-            // ���¸��ӹ�ϵ
-            transform.SetParent(grid.transform);
-            transform.localPosition = Vector3.zero; // ��֤����
+            yield return null;
         }
-        isMoving = false;
-        Move();
+
+        // 最终落地到格子
+        transform.position = endPos;
+
+        // 更新格子占用
+        if (startGrid != null)
+        {
+            var oldGrid = startGrid.GetComponent<GameGrid>();
+            oldGrid.isOccupied = false;
+            oldGrid.occupiedPlayer = null;
+        }
+
+        grid.isOccupied = true;
+        grid.occupiedPlayer = this;
+        startGrid = grid.gameObject;
+
+        string[] nameParts = grid.name.Split('_');
+        int x = int.Parse(nameParts[1]);
+        int y = int.Parse(nameParts[2]);
+        startPoint = new Vector2Int(x, y);
+        currentGridPos = startPoint;
+
+        IsoGrid2D.instance.currentPlayerGrid = grid.GetComponent<GameGrid>();
+
+        transform.SetParent(grid.transform);
+        transform.localPosition = Vector3.zero;
     }
+
+    isMoving = false;
+    Move();
+}
+
+
 
     public void TakeDamage(float amount)
     {
