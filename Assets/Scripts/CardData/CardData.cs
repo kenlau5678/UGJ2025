@@ -21,7 +21,7 @@ public class CardData : ScriptableObject
 
     public AttackAttribute attackAttribute = AttackAttribute.None;
     public int SegmentCount = 0;
-
+    public int PullDistance = 0;
     // Enum for simple effects
     public enum CardEffectType
     {
@@ -43,7 +43,8 @@ public class CardData : ScriptableObject
         Poison,
         Lightning,
         Dizziness,
-        MultipleDamage
+        MultipleDamage,
+        Pull
     }
 
     // Optional: Delegate for custom effects
