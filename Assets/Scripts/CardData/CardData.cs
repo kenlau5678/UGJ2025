@@ -32,6 +32,7 @@ public class CardData : ScriptableObject
         Shield,
         Switch,
         Bloodsucking,
+        StraightAttack
     }
 
     // π•ª˜ Ù–‘£®ø…¿©’π£©

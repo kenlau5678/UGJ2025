@@ -738,6 +738,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: db581ccadfe670d47a6251c0a57e6c62, type: 2}
   - {fileID: 11400000, guid: db581ccadfe670d47a6251c0a57e6c62, type: 2}
   - {fileID: 11400000, guid: db581ccadfe670d47a6251c0a57e6c62, type: 2}
+  - {fileID: 11400000, guid: 8feefd477a202fb4c9dc62f51b0af795, type: 2}
+  - {fileID: 11400000, guid: 8feefd477a202fb4c9dc62f51b0af795, type: 2}
+  - {fileID: 11400000, guid: 8feefd477a202fb4c9dc62f51b0af795, type: 2}
+  - {fileID: 11400000, guid: 8feefd477a202fb4c9dc62f51b0af795, type: 2}
   deck: []
 --- !u!4 &324216002
 Transform:
