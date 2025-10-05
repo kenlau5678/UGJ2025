@@ -20,6 +20,7 @@ public class GameGrid : MonoBehaviour
     public bool isInterable = false; // 是否可交互
 
     public Color interactColor = Color.blue; // 可交互格子颜色
+    public Vector3 playerOriginalScale;
     void Start()
     {
         rend = GetComponent<SpriteRenderer>();
@@ -32,20 +33,25 @@ public class GameGrid : MonoBehaviour
         selectGrid.enabled = true;
         IsoGrid2D.instance.currentSelectedGrid = this;
 
-        // 如果有玩家站在格子上，做一个放大缩小动画
         if (occupiedPlayer != null)
         {
             Transform playerTransform = occupiedPlayer.transform;
 
-            // 先杀掉可能还在跑的 scale 动画，避免叠加
+            // 只在第一次记录原始缩放
+            if (playerOriginalScale == Vector3.zero)
+            {
+                playerOriginalScale = playerTransform.localScale;
+            }
+
+            // 先停止旧动画
             playerTransform.DOKill();
 
-            // 保存原始缩放
-            Vector3 originalScale = playerTransform.localScale;
+            // 每次执行动画前，重置为原始大小（防止越放越大）
+            playerTransform.localScale = playerOriginalScale;
 
-            // 放大到1.2倍，再回到原始大小
-            playerTransform.DOScale(originalScale * 1.1f, 0.1f)
-                .SetLoops(2, LoopType.Yoyo) // 往返两次
+            // 执行放大再还原动画
+            playerTransform.DOScale(playerOriginalScale * 1.1f, 0.1f)
+                .SetLoops(2, LoopType.Yoyo)
                 .SetEase(Ease.OutQuad);
         }
     }
