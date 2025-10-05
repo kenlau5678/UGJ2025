@@ -71,43 +71,50 @@ public class GameGrid : MonoBehaviour
     void OnMouseDown()
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
-        UnitController player = FindObjectOfType<UnitController>();
+
+        UnitController playerController = IsoGrid2D.instance.controller.GetComponent<UnitController>();
 
         if (isInRange) // ÒÆ¶¯
         {
-            UnitController playerToAction = IsoGrid2D.instance.controller.GetComponent<UnitController>();
-            playerToAction.MoveToGrid(this);
+            playerController.MoveToGrid(this);
+            return;
         }
-        else if (isAttackTarget) // ¹¥»÷
+
+        if (isAttackTarget) // ¹¥»÷
         {
-            
-            if(IsoGrid2D.instance.controller.GetComponent<UnitController>().isNextAttackDizziness == true)
+            if (playerController.isNextAttackDizziness)
             {
-                this.currentEnemy.Dizziness();
-                IsoGrid2D.instance.controller.GetComponent<UnitController>().Attack(this);
-                IsoGrid2D.instance.controller.GetComponent<UnitController>().isNextAttackDizziness = false;
+                currentEnemy.Dizziness();
+                playerController.Attack(this);
+                playerController.isNextAttackDizziness = false;
             }
-            if (IsoGrid2D.instance.controller.GetComponent<UnitController>().isNextAttackMultiple == true)
+            else if (playerController.isNextAttackMultiple)
             {
                 StartCoroutine(AttackMultiple());
-                IsoGrid2D.instance.controller.GetComponent<UnitController>().isNextAttackMultiple = false;
+                playerController.isNextAttackMultiple = false;
+            }
+            else if (playerController.isNextAttackPull)
+            {
+                playerController.Attack(this);
+                currentEnemy.BePulled(playerController.currentGridPos, playerController.PullDistance);
+                playerController.PullDistance = 0;
+                playerController.isNextAttackPull = false; 
             }
             else
             {
-                IsoGrid2D.instance.controller.GetComponent<UnitController>().Attack(this);
+                playerController.Attack(this);
             }
+
             IsoGrid2D.instance.ClearHighlight();
+            return;
         }
-        else
+
+        if (occupiedPlayer != null) // ÇÐ»»½ÇÉ«
         {
-            if(occupiedPlayer != null)
-            {
-                
-                TurnManager.instance.ChangePlayer(occupiedPlayer);
-                
-            }
+            TurnManager.instance.ChangePlayer(occupiedPlayer);
         }
     }
+
 
     private IEnumerator AttackMultiple()
     {

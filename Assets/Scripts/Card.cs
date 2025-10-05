@@ -228,10 +228,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
             case CardData.CardEffectType.Attack:
                 {
                     // 使用卡牌的攻击范围（如果想让卡牌控制范围，可以加 attackRange 字段）
-                    bool hasTarget = IsoGrid2D.instance.HighlightAttackRange(
-                        playerUnit.currentGridPos,
-                        1 // 近战固定 1 格，或者可以改成 data.attackRange
-                    );
+                    bool hasTarget = IsoGrid2D.instance.HighlightAttackArea(playerUnit.currentGridPos, data.attackRange);
 
                     if (hasTarget)
                     {
@@ -268,6 +265,24 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                 }
                 break;
 
+            case CardData.CardEffectType.StraightAttack:
+                {
+
+                    bool hasStraightTarget = IsoGrid2D.instance.HighlightStraightAttackArea(playerUnit.currentGridPos, data.attackRange);
+                    Debug.Log(hasStraightTarget);
+
+                    if (hasStraightTarget)
+                    {
+                        playerUnit.attackDamage = data.amount;
+                        if (data.attackAttribute == CardData.AttackAttribute.Pull)
+                        {
+                            playerUnit.PullDistance = data.PullDistance;
+                            playerUnit.isNextAttackPull = true;
+                        }
+                        effectExecuted = true;
+                    }
+                }
+                break;
             case CardData.CardEffectType.Heal:
                 if(playerUnit.currentHealth < playerUnit.maxHealth)
                 {

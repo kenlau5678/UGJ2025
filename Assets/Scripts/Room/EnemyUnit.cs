@@ -230,4 +230,92 @@ public class EnemyUnit : MonoBehaviour
         Color c = Color.white;
         sr.color = c;
     }
+
+    /// <summary>
+    /// 敌人被拉向玩家（带快速移动效果）
+    /// </summary>
+    /// <param name="playerPos">玩家所在格子</param>
+    /// <param name="pullRange">最多拉多少格</param>
+    public void BePulled(Vector2Int playerPos, int pullRange)
+    {
+        // 计算方向（单位向量）
+        Vector2Int dir = playerPos - startPoint;
+
+        // 如果敌人和玩家在对角线方向（比如 ↖ ↘），直接return，不拉
+        if (Mathf.Abs(dir.x) > 0 && Mathf.Abs(dir.y) > 0) return;
+        if (dir == Vector2Int.zero) return; // 已经和玩家重叠
+
+        dir = new Vector2Int(Mathf.Clamp(dir.x, -1, 1), Mathf.Clamp(dir.y, -1, 1));
+
+        // 玩家前一格 = 玩家位置 - 拉的方向
+        Vector2Int maxPullPos = playerPos - dir;
+
+        // 实际能拉的目标位置
+        Vector2Int targetPos = startPoint;
+
+        for (int step = 1; step <= pullRange; step++)
+        {
+            Vector2Int nextPos = startPoint + dir * step;
+
+            // 超出地图
+            if (nextPos.x < 0 || nextPos.x >= IsoGrid2D.instance.width ||
+                nextPos.y < 0 || nextPos.y >= IsoGrid2D.instance.height)
+                break;
+
+            // 不能超过玩家前一格
+            if (nextPos == playerPos) break;
+            if (nextPos == maxPullPos + dir) break;
+
+            GameGrid nextGrid = IsoGrid2D.instance.GetTile(nextPos.x, nextPos.y).GetComponent<GameGrid>();
+
+            if (nextGrid.isOccupied) break; // 前方被挡住就停下
+
+            targetPos = nextPos;
+        }
+
+        if (targetPos == startPoint) return; // 没有移动
+
+        StopAllCoroutines();
+        StartCoroutine(PullToPosition(targetPos));
+    }
+
+    /// <summary>
+    /// 协程：平滑拉动敌人
+    /// </summary>
+    private IEnumerator PullToPosition(Vector2Int targetPos)
+    {
+        // ---- 释放旧格子 ----
+        if (startGrid != null)
+        {
+            GameGrid oldGrid = startGrid.GetComponent<GameGrid>();
+            oldGrid.isOccupied = false;
+            oldGrid.currentEnemy = null;
+        }
+
+        GameGrid newGrid = IsoGrid2D.instance.GetTile(targetPos.x, targetPos.y).GetComponent<GameGrid>();
+        newGrid.isOccupied = true;
+        newGrid.currentEnemy = this;
+
+        startPoint = targetPos;
+        startGrid = newGrid.gameObject;
+
+        Vector3 targetWorldPos = newGrid.transform.position;
+        float speed = moveSpeed * 2f; // 拉扯时快一点，你可以调
+
+        // 平滑移动
+        while ((transform.position - targetWorldPos).sqrMagnitude > 0.01f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetWorldPos, speed * Time.deltaTime);
+            yield return null;
+        }
+
+        transform.position = targetWorldPos;
+
+        // 挂在新格子下
+        transform.SetParent(newGrid.transform);
+        transform.localPosition = Vector3.zero;
+
+        Debug.Log($"{name} 被拉到 {targetPos}");
+    }
+
 }

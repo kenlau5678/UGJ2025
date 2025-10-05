@@ -225,35 +225,7 @@ public class IsoGrid2D : MonoBehaviour
         return Mathf.Abs(a.position.x - b.position.x) + Mathf.Abs(a.position.y - b.position.y);
     }
 
-    public bool HighlightAttackRange(Vector2Int playerPos, int attackRange)
-    {
-        ClearHighlight();
-
-        bool foundTarget = false;
-
-        Vector2Int[] directions = {
-        Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right
-    };
-
-        foreach (var dir in directions)
-        {
-            Vector2Int targetPos = playerPos + dir * attackRange;
-            GameObject tile = GetTile(targetPos.x, targetPos.y);
-            if (tile != null)
-            {
-                EnemyUnit enemy = tile.GetComponentInChildren<EnemyUnit>();
-                if (enemy != null) // 如果该格子有敌人
-                {
-                    GameGrid gridComp = tile.GetComponent<GameGrid>();
-                    gridComp.SetColor(Color.red); // 高亮为红色
-                    gridComp.isAttackTarget = true;
-                    foundTarget = true;
-                }
-            }
-        }
-
-        return foundTarget;
-    }
+    
     public void HighlightSingleTile(Vector2Int pos)
     {
         ClearHighlight(); // 先清空已有高亮（可选，看你需不需要多格同时亮）
@@ -266,83 +238,6 @@ public class IsoGrid2D : MonoBehaviour
             gridComp.isInRange = true;  // 你可以用这个布尔来标记它被高亮了
         }
     }
-
-    public bool HighlightRangedAttack(Vector2Int playerPos, int attackRange)
-    {
-        ClearHighlight();
-
-        bool foundTarget = false;
-
-        for (int dx = -attackRange; dx <= attackRange; dx++)
-        {
-            for (int dy = -attackRange; dy <= attackRange; dy++)
-            {
-                int distance = Mathf.Abs(dx) + Mathf.Abs(dy); // 曼哈顿距离
-                if (distance == 0 || distance > attackRange) continue;
-
-                Vector2Int targetPos = playerPos + new Vector2Int(dx, dy);
-                GameObject tile = GetTile(targetPos.x, targetPos.y);
-                if (tile != null)
-                {
-                    EnemyUnit enemy = tile.GetComponentInChildren<EnemyUnit>();
-                    GameGrid gridComp = tile.GetComponent<GameGrid>();
-
-                    if (enemy != null)
-                    {
-                        // 找到敌人 → alpha 1
-                        gridComp.SetColor(new Color(1f, 0.5f, 0.5f, 1f));
-                        gridComp.isAttackTarget = true;
-                        foundTarget = true;
-                    }
-                    else
-                    {
-                        // 范围格子 → 半透明
-                        gridComp.SetColor(new Color(1f, 0.5f, 0.5f, 0.3f));
-                    }
-                }
-            }
-        }
-
-        return foundTarget;
-    }
-
-    public void HighlightRangedAttackRangeHover(Vector2Int playerPos, int attackRange)
-    {
-        ClearHighlight();
-        HighlightSingleTile(playerPos);
-        for (int dx = -attackRange; dx <= attackRange; dx++)
-        {
-            for (int dy = -attackRange; dy <= attackRange; dy++)
-            {
-                Vector2Int targetPos = new Vector2Int(playerPos.x + dx, playerPos.y + dy);
-                int distance = Mathf.Abs(dx) + Mathf.Abs(dy); // 曼哈顿距离（菱形范围）
-                if (distance == 0 || distance > attackRange) continue;
-
-                GameObject tile = GetTile(targetPos.x, targetPos.y);
-                if (tile != null)
-                {
-                    GameGrid gridComp = tile.GetComponent<GameGrid>();
-                    EnemyUnit enemy = tile.GetComponentInChildren<EnemyUnit>();
-
-                    if (enemy != null)
-                    {
-                        // 敌人在格子上 → alpha 1
-                        Color c = new Color(1f, 0.5f, 0.5f, 1f);
-                        gridComp.SetColor(c);
-                        gridComp.isAttackTarget = true;
-                    }
-                    else
-                    {
-                        // 空格子 → 半透明
-                        Color c = new Color(1f, 0.5f, 0.5f, 0.3f);
-                        gridComp.SetColor(c);
-                    }
-                }
-            }
-        }
-    }
-
-
     public List<GameGrid> GetRangedAttackTiles(Vector2Int playerPos, int attackRange)
     {
         List<GameGrid> tilesInRange = new List<GameGrid>();
@@ -435,6 +330,51 @@ public class IsoGrid2D : MonoBehaviour
         }
 
         return tiles;
+    }
+    /// <summary>
+    /// 高亮玩家上下左右直线范围（类似十字攻击）
+    /// </summary>
+    /// <param name="playerPos">玩家格子坐标</param>
+    /// <param name="attackRange">直线范围</param>
+    /// <returns>范围内是否有敌人</returns>
+    public bool HighlightStraightAttackArea(Vector2Int playerPos, int attackRange)
+    {
+        ClearHighlight();
+        HighlightSingleTile(playerPos); // 高亮玩家自己
+
+        bool hasEnemy = false;
+
+        // 四个方向
+        Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+
+        foreach (var dir in directions)
+        {
+            for (int step = 1; step <= attackRange; step++)
+            {
+                Vector2Int targetPos = playerPos + dir * step;
+                GameObject tile = GetTile(targetPos.x, targetPos.y);
+
+                if (tile == null) break; // 超出地图
+
+                GameGrid gridComp = tile.GetComponent<GameGrid>();
+                EnemyUnit enemy = tile.GetComponentInChildren<EnemyUnit>();
+
+                if (enemy != null)
+                {
+                    // 敌人 → 不透明红色
+                    gridComp.SetColor(new Color(1f, 0.5f, 0.5f, 1f));
+                    gridComp.isAttackTarget = true;
+                    hasEnemy = true;
+                }
+                else
+                {
+                    // 空格子 → 半透明红色
+                    gridComp.SetColor(new Color(1f, 0.5f, 0.5f, 0.3f));
+                }
+            }
+        }
+
+        return hasEnemy;
     }
 
 
