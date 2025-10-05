@@ -19,5 +19,7 @@ MonoBehaviour:
   manaCost: 0
   effectType: 3
   amount: 5
-  attackRange: 5
+  attackRange: 8
   attackAttribute: 0
+  SegmentCount: 0
+  PullDistance: 0
