@@ -167,7 +167,7 @@ public class UnitController : MonoBehaviour
         transform.localPosition = Vector3.zero;
 
         if (sr != null)
-                sr.sortingOrder = grid.GetComponent<GameGrid>().rend.sortingOrder + 2;
+                sr.sortingOrder = grid.GetComponent<GameGrid>().sortingOrder*-1 + 2;
         }
 
     isMoving = false;

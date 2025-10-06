@@ -173,7 +173,7 @@ public class EnemyUnit : MonoBehaviour
             transform.SetParent(grid.transform);
             transform.localPosition = Vector3.zero;
             if (sr != null)
-                sr.sortingOrder = grid.GetComponent<GameGrid>().rend.sortingOrder + 2;
+                sr.sortingOrder = grid.GetComponent<GameGrid>().sortingOrder * -1 + 2;
         }
 
         // ¹¥»÷ÅÐ¶¨

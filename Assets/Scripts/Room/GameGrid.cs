@@ -33,9 +33,6 @@ public class GameGrid : MonoBehaviour
         //以 (0,0) 为最近点，越远的格子越“靠后”
         sortingOrder = gridPos.x + gridPos.y;
 
-        // 应用到 SpriteRenderer（负号让越远越小）
-        rend.sortingOrder = -sortingOrder;
-
         // 如果选中框要在格子上层
         if (selectGrid != null)
             selectGrid.sortingOrder = -sortingOrder + 1;
