@@ -12,9 +12,11 @@ public class ItemInGrid : MonoBehaviour
 
     private List<GameGrid> occupiedGrids = new List<GameGrid>();
     public bool isInterable = false; // 是否可交互
+    public SpriteRenderer sr;
 
     void Start()
     {
+        sr = transform.GetComponent<SpriteRenderer>();
         // 占用格子
         if (isSingleCell)
         {
@@ -23,6 +25,19 @@ public class ItemInGrid : MonoBehaviour
         else
         {
             Occupy(cornerA, cornerB);
+        }
+
+        if (sr != null && occupiedGrids.Count > 0)
+        {
+            float sum = 0f;
+            foreach (var grid in occupiedGrids)
+            {
+                sum += -(grid.gridPos.x + grid.gridPos.y); // 按照原来的规则取负
+            }
+
+            int average = Mathf.RoundToInt(sum / occupiedGrids.Count);
+            sr.sortingOrder = average + 2; // +2 确保显示在格子上方
+            transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = average + 3;
         }
 
         // 可交互只标记，不改变颜色
