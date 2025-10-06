@@ -26,11 +26,22 @@ public class EnemyUnit : MonoBehaviour
         if (IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y) != null)
         {
             startGrid = IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y);
-            startGrid.GetComponent<GameGrid>().isOccupied = true;
-            startGrid.GetComponent<GameGrid>().currentEnemy = this;
+            var gridComp = startGrid.GetComponent<GameGrid>();
+
+            gridComp.isOccupied = true;
+            gridComp.currentEnemy = this;
+
             transform.SetParent(startGrid.transform);
             transform.localPosition = Vector3.zero;
+
+            //同步敌人 SpriteRenderer 层级
+            if (sr != null)
+            {
+                int sortingOrder = startPoint.x + startPoint.y;
+                sr.sortingOrder = -sortingOrder + 2; // +2 确保比格子高
+            }
         }
+
 
         currentHealth = maxHealth;
         healthSystem.SetMaxHealth(maxHealth);
@@ -161,6 +172,8 @@ public class EnemyUnit : MonoBehaviour
 
             transform.SetParent(grid.transform);
             transform.localPosition = Vector3.zero;
+            if (sr != null)
+                sr.sortingOrder = grid.GetComponent<GameGrid>().rend.sortingOrder + 2;
         }
 
         // 攻击判定

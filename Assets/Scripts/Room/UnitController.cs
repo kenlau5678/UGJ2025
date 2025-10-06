@@ -49,11 +49,23 @@ public class UnitController : MonoBehaviour
         if (IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y) != null)
         {
             startGrid = IsoGrid2D.instance.GetTile(startPoint.x, startPoint.y);
-            startGrid.GetComponent<GameGrid>().isOccupied = true;
-            startGrid.GetComponent<GameGrid>().occupiedPlayer = this;
+            var gridComp = startGrid.GetComponent<GameGrid>();
+
+            gridComp.isOccupied = true;
+            gridComp.occupiedPlayer = this;
+
             transform.SetParent(startGrid.transform);
             transform.localPosition = Vector3.zero;
-            IsoGrid2D.instance.currentPlayerGrid = startGrid.GetComponent<GameGrid>();
+
+            //同步角色排序层级
+            if (sr != null)
+            {
+                int sortingOrder = startPoint.x+ startPoint.y;
+                sr.sortingOrder = -sortingOrder + 2; // +2 确保比格子高
+            }
+
+
+            IsoGrid2D.instance.currentPlayerGrid = gridComp;
         }
 
         currentHealth = maxHealth;
@@ -153,7 +165,10 @@ public class UnitController : MonoBehaviour
 
         transform.SetParent(grid.transform);
         transform.localPosition = Vector3.zero;
-    }
+
+        if (sr != null)
+                sr.sortingOrder = grid.GetComponent<GameGrid>().rend.sortingOrder + 2;
+        }
 
     isMoving = false;
     Move();

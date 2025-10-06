@@ -5,7 +5,7 @@ using System.Collections;
 public class GameGrid : MonoBehaviour
 {
     public Vector2Int gridPos;
-    private SpriteRenderer rend;
+    public SpriteRenderer rend;
     private Color originalColor;
     public Color hoverColor = Color.green;
     public Color moveRangeColor = new Color(1f, 0.5f, 0f,0.5f); // 橙色
@@ -21,12 +21,28 @@ public class GameGrid : MonoBehaviour
 
     public Color interactColor = Color.blue; // 可交互格子颜色
     public Vector3 playerOriginalScale;
-    void Start()
+
+    public int sortingOrder;
+    private void Awake()
     {
         rend = GetComponent<SpriteRenderer>();
+
+    }
+    void Start()
+    {
+        //以 (0,0) 为最近点，越远的格子越“靠后”
+        sortingOrder = gridPos.x + gridPos.y;
+
+        // 应用到 SpriteRenderer（负号让越远越小）
+        rend.sortingOrder = -sortingOrder;
+
+        // 如果选中框要在格子上层
+        if (selectGrid != null)
+            selectGrid.sortingOrder = -sortingOrder + 1;
         originalColor = rend.color;
         selectGrid.enabled = false;
     }
+
 
     void OnMouseEnter()
     {
