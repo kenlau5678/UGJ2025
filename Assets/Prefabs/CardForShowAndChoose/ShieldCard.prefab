@@ -408,3 +408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 511e39397a9261c4b8c669635ff6c318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardData: {fileID: 11400000, guid: 872851f17754d0646944ad83cb0e558a, type: 2}
+  hoverScale: {x: 1.2, y: 1.2, z: 1}
+  hoverDuration: 0.2
+  clickDuration: 0.15

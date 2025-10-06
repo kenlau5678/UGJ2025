@@ -18,6 +18,8 @@ MonoBehaviour:
   visualPrefab: {fileID: 7310339964073049012, guid: a02b6a680dfd492478c73dcf9c54b782, type: 3}
   manaCost: 0
   effectType: 3
-  amount: 5
-  attackRange: 1
+  amount: 0
+  attackRange: 8
   attackAttribute: 5
+  SegmentCount: 0
+  PullDistance: 0

@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f646e95bb4270f94886fe202beddac37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startPoint: {x: 0, y: 0}
+  startPoint: {x: 0, y: 20}
   startGrid: {fileID: 0}
   moveRange: 8
   moveSpeed: 2
@@ -150,7 +150,18 @@ MonoBehaviour:
   rangedMultiplier: 0.6
   dodgeChance: 0.15
   currentGridPos: {x: 0, y: 0}
+  maxActionPoints: 3
+  actionPoints: 0
   shield: 0
+  isMoving: 0
+  sr: {fileID: 0}
+  isActive: 0
+  isNextAttackDizziness: 0
+  isNextAttackMultiple: 0
+  SegmentCount: 0
+  isNextAttackBloodSucking: 0
+  isNextAttackPull: 0
+  PullDistance: 0
 --- !u!114 &3546787565854375578
 MonoBehaviour:
   m_ObjectHideFlags: 0

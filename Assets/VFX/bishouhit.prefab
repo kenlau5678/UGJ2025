@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5868282839879356262}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.1, y: -15.5, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
@@ -53,11 +53,17 @@ VisualEffect:
     m_Float:
       m_Array: []
     m_Vector2f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 2.5, y: 0.02}
+        m_Name: sizerandom
+        m_Overridden: 1
     m_Vector3f:
       m_Array: []
     m_Vector4f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 1, y: 1, z: -1, w: -1}
+        m_Name: positionrandom
+        m_Overridden: 1
     m_Uint:
       m_Array: []
     m_Int:
@@ -69,9 +75,24 @@ VisualEffect:
     m_Gradient:
       m_Array: []
     m_NamedObject:
-      m_Array: []
+      m_Array:
+      - m_Value: {fileID: 2800000, guid: 1608335ea20e66543b3d63de4e3e312a, type: 3}
+        m_Name: bishouIMG
+        m_Overridden: 1
+      - m_Value: {fileID: 2800000, guid: ac2450d6550469a4dadac59913376144, type: 3}
+        m_Name: bloodIMG
+        m_Overridden: 1
     m_Bool:
-      m_Array: []
+      m_Array:
+      - m_Value: 1
+        m_Name: 1
+        m_Overridden: 1
+      - m_Value: 1
+        m_Name: 2
+        m_Overridden: 1
+      - m_Value: 1
+        m_Name: 3
+        m_Overridden: 1
 --- !u!73398921 &5062424965284284725
 VFXRenderer:
   serializedVersion: 1
