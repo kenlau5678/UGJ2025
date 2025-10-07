@@ -19,6 +19,10 @@ public class EnemyUnit : MonoBehaviour
     public bool isDizziness;
 
     public SpriteRenderer sr;
+    [Header("Sprites")]
+    public Sprite frontSprite;
+    public Sprite backSprite;
+
     private void Start()
     {
         sr = transform.GetChild(0).GetComponent<SpriteRenderer>();
@@ -140,6 +144,10 @@ public class EnemyUnit : MonoBehaviour
     {
         foreach (var grid in path)
         {
+            Vector2Int prevPos = startPoint;
+            string[] nameParts = grid.name.Split('_');
+            Vector2Int nextPos = new Vector2Int(int.Parse(nameParts[1]), int.Parse(nameParts[2]));
+            UpdateDirectionSprite(prevPos, nextPos); // 关键行
             // ---- 把目标格子先标记为占用，防止冲突 ----
             grid.isOccupied = true;
             grid.currentEnemy = this;
@@ -165,7 +173,6 @@ public class EnemyUnit : MonoBehaviour
             // ---- 占用新的格子 ----
             startGrid = grid.gameObject;
 
-            string[] nameParts = grid.name.Split('_');
             int x = int.Parse(nameParts[1]);
             int y = int.Parse(nameParts[2]);
             startPoint = new Vector2Int(x, y);
@@ -193,7 +200,7 @@ public class EnemyUnit : MonoBehaviour
     private void AttackPlayer()
     {
         if (targetPlayer == null || currentHealth <= 0) return;
-
+        UpdateDirectionSprite(startPoint, targetPlayer.currentGridPos);
         targetPlayer.TakeDamage(attackDamage);
         Debug.Log("Enemy attacks player!");
     }
@@ -330,5 +337,32 @@ public class EnemyUnit : MonoBehaviour
 
         Debug.Log($"{name} 被拉到 {targetPos}");
     }
+
+    private void UpdateDirectionSprite(Vector2Int from, Vector2Int to)
+    {
+        Vector2Int dir = to - from;
+
+        if (dir.y < 0) // 向前（地图上y减小）
+        {
+            sr.sprite = frontSprite;
+            sr.flipX = true;
+        }
+        else if (dir.y > 0) // 向后（地图上y增大）
+        {
+            sr.sprite = backSprite;
+            sr.flipX = false;
+        }
+        else if (dir.x > 0) // 向右
+        {
+            sr.sprite = backSprite;
+            sr.flipX = true;
+        }
+        else if (dir.x < 0) // 向左
+        {
+            sr.sprite = frontSprite;
+            sr.flipX = false;
+        }
+    }
+
 
 }

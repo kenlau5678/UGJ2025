@@ -42,6 +42,10 @@ public class UnitController : MonoBehaviour
 
     public bool isNextAttackPull = false;
     public int PullDistance = 0;
+
+    [Header("Sprites")]
+    public Sprite frontSprite;
+    public Sprite backSprite;
     private void Start()
     {
         sr = transform.GetChild(0).GetComponent<SpriteRenderer>();
@@ -117,8 +121,11 @@ public class UnitController : MonoBehaviour
     {
         Vector3 startPos = transform.position;
         Vector3 endPos = grid.transform.position;
-
-        float distance = Vector2.Distance(startPos, endPos);
+            Vector2Int prevPos = startPoint;
+            string[] nameParts = grid.name.Split('_');
+            Vector2Int nextPos = new Vector2Int(int.Parse(nameParts[1]), int.Parse(nameParts[2]));
+            UpdateDirectionSprite(prevPos, nextPos); // 关键行
+            float distance = Vector2.Distance(startPos, endPos);
         float travelTime = distance / moveSpeed; // 移动时间
         float elapsed = 0f;
 
@@ -154,8 +161,7 @@ public class UnitController : MonoBehaviour
         grid.isOccupied = true;
         grid.occupiedPlayer = this;
         startGrid = grid.gameObject;
-
-        string[] nameParts = grid.name.Split('_');
+        
         int x = int.Parse(nameParts[1]);
         int y = int.Parse(nameParts[2]);
         startPoint = new Vector2Int(x, y);
@@ -168,7 +174,7 @@ public class UnitController : MonoBehaviour
 
         if (sr != null)
                 sr.sortingOrder = grid.GetComponent<GameGrid>().sortingOrder*-1 + 2;
-        }
+    }
 
     isMoving = false;
     Move();
@@ -239,6 +245,7 @@ public class UnitController : MonoBehaviour
         EnemyUnit enemy = targetGrid.GetComponentInChildren<EnemyUnit>();
         if (enemy != null)
         {
+            UpdateDirectionSprite(currentGridPos, targetGrid.gridPos);
             Debug.Log($"��ҹ��� {enemy.name}����� {attackDamage} �˺���");
             enemy.TakeDamage(attackDamage);
            
@@ -322,4 +329,31 @@ public class UnitController : MonoBehaviour
         isNextAttackBloodSucking = false;
         sr.color = Color.white;
     }
+
+    private void UpdateDirectionSprite(Vector2Int from, Vector2Int to)
+    {
+        Vector2Int dir = to - from;
+
+        if (dir.y < 0) // 向前（地图上y减小）
+        {
+            sr.sprite = frontSprite;
+            sr.flipX = true;
+        }
+        else if (dir.y > 0) // 向后（地图上y增大）
+        {
+            sr.sprite = backSprite;
+            sr.flipX = false;
+        }
+        else if (dir.x > 0) // 向右
+        {
+            sr.sprite = backSprite;
+            sr.flipX = true;
+        }
+        else if (dir.x < 0) // 向左
+        {
+            sr.sprite = frontSprite;
+            sr.flipX = false;
+        }
+    }
+
 }

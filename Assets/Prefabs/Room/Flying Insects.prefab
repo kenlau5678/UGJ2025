@@ -57,6 +57,10 @@ MonoBehaviour:
   maxHealth: 15
   currentHealth: 0
   attackDamage: 5
+  isDizziness: 0
+  sr: {fileID: 0}
+  frontSprite: {fileID: 21300000, guid: f9ecb1348d7f9c54e99418803643ff68, type: 3}
+  backSprite: {fileID: 21300000, guid: 1b522d72ca4766f4492a4e8934d73b41, type: 3}
 --- !u!114 &5695332646528642167
 MonoBehaviour:
   m_ObjectHideFlags: 0

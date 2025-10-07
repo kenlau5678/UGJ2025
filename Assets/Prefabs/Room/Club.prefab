@@ -150,7 +150,20 @@ MonoBehaviour:
   rangedMultiplier: 0.8
   dodgeChance: 0.1
   currentGridPos: {x: 0, y: 0}
+  maxActionPoints: 3
+  actionPoints: 0
   shield: 0
+  isMoving: 0
+  sr: {fileID: 0}
+  isActive: 0
+  isNextAttackDizziness: 0
+  isNextAttackMultiple: 0
+  SegmentCount: 0
+  isNextAttackBloodSucking: 0
+  isNextAttackPull: 0
+  PullDistance: 0
+  frontSprite: {fileID: 21300000, guid: 97306352c3948b24f970215e34cceb52, type: 3}
+  backSprite: {fileID: 21300000, guid: 17743db14c1f68c41bd9fab79fa74104, type: 3}
 --- !u!114 &3546787565854375578
 MonoBehaviour:
   m_ObjectHideFlags: 0
