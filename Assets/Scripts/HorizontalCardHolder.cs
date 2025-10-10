@@ -230,6 +230,18 @@ public class HorizontalCardHolder : MonoBehaviour
 
         StartCoroutine(PlayerAnimation());
         Destroy(card.transform.parent.gameObject);
+        //StartCoroutine(DrawNewCard());
+        //// 更新显示
+        //foreach (var c in cards)
+        //    if (c.cardVisual != null)
+        //        c.cardVisual.UpdateIndex(transform.childCount);
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
+        
+    }
+
+    public void DrawCardAndUpdate()
+    {
         StartCoroutine(DrawNewCard());
         // 更新显示
         foreach (var c in cards)
@@ -237,7 +249,6 @@ public class HorizontalCardHolder : MonoBehaviour
                 c.cardVisual.UpdateIndex(transform.childCount);
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
-        
     }
 
     private IEnumerator PlayerAnimation()

@@ -300,7 +300,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -50
+  m_SortingOrder: -1000
   m_Sprite: {fileID: 21300000, guid: 6222ef0120c7a8e4f9189258d52efb2c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1604,7 +1604,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: -999
   m_Sprite: {fileID: 21300000, guid: 07216c9d69d00b44f8915725f32feba4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2150,6 +2150,7 @@ MonoBehaviour:
   cornerB: {x: 7, y: 8}
   isSingleCell: 0
   isInterable: 1
+  sr: {fileID: 0}
 --- !u!212 &992588194
 SpriteRenderer:
   m_ObjectHideFlags: 0

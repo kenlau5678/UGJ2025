@@ -90,6 +90,7 @@ public class UnitController : MonoBehaviour
 
     public void Move()
     {
+        if (IsoGrid2D.instance.isWaitingForGridClick) return;
         if (actionPoints <= 0) return;
         IsoGrid2D.instance.HighlightMoveRange(startPoint, moveRange);
     }
