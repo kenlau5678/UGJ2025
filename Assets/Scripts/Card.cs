@@ -234,6 +234,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                     {
                         // TODO: 在 HighlightAttackRange 里找到目标后，对敌人调用 TakeDamage(data.amount)
                         playerUnit.attackDamage = data.amount;
+                        
                         if (data.attackAttribute == CardData.AttackAttribute.MultipleDamage)
                         {
                             playerUnit.isNextAttackMultiple = true;
