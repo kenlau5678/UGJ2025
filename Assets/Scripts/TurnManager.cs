@@ -69,8 +69,8 @@ public class TurnManager : MonoBehaviour
         actionPointText.text = "[" + unitControllers[0].name +"]"+"Action Point: " + unitControllers[0].actionPoints;
         ChangePlayer(unitControllers[0]);
         // --- 回合开始时抽一张卡 ---
-        if (playerCardHolder != null)
-            playerCardHolder.StartCoroutine(playerCardHolder.DrawNewCard());
+        //if (playerCardHolder != null)
+        //    playerCardHolder.StartCoroutine(playerCardHolder.DrawNewCard());
         UnitController[] players = FindObjectsOfType<UnitController>();
         foreach(UnitController player in players)
         {

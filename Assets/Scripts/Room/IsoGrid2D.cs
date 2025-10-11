@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -14,6 +15,9 @@ public class IsoGrid2D : MonoBehaviour
     // 用一维列表存格子，Inspector 可见
     public List<GameObject> grid = new List<GameObject>();
     public GameGrid currentPlayerGrid = null;
+
+    public bool isWaitingForGridClick = false;
+    public Card waitingCard;
     private void Awake()
     {
         if (instance == null)
@@ -118,10 +122,16 @@ public class IsoGrid2D : MonoBehaviour
     }
 
 
-
+    public void ResetWaiting()
+    {
+        isWaitingForGridClick = false;
+        waitingCard = null;
+        ClearHighlight();
+    }
 
     public void ClearHighlight()
     {
+        if (isWaitingForGridClick) return;
         foreach (var tile in grid)
         {
             GameGrid gridComp = tile.GetComponent<GameGrid>();
@@ -129,6 +139,7 @@ public class IsoGrid2D : MonoBehaviour
             gridComp.isInRange = false;
             gridComp.isAttackTarget = false;
         }
+
     }
 
     public List<GameGrid> FindPath(Vector2Int start, Vector2Int target)
@@ -235,7 +246,7 @@ public class IsoGrid2D : MonoBehaviour
         {
             GameGrid gridComp = tile.GetComponent<GameGrid>();
             gridComp.SetColor(new Color(1f, 0.5f, 0.5f, 1f));
-            gridComp.isInRange = true;  // 你可以用这个布尔来标记它被高亮了
+            
         }
     }
     public List<GameGrid> GetRangedAttackTiles(Vector2Int playerPos, int attackRange)
@@ -377,5 +388,23 @@ public class IsoGrid2D : MonoBehaviour
         return hasEnemy;
     }
 
+
+    public void CancelPendingCard()
+    {
+        if (waitingCard != null)
+        {
+            Debug.Log("取消出卡，卡牌返回手牌。");
+            HorizontalCardHolder holder = FindObjectOfType<HorizontalCardHolder>();
+            Card cancelledCard = waitingCard;
+            ClearHighlight();
+
+            // 动画返回到手牌位置
+            cancelledCard.transform.DOLocalMove(Vector3.zero, 0.3f).SetEase(Ease.OutBack);
+
+            // 恢复为未打出的状态
+            if (!holder.cards.Contains(cancelledCard))
+                holder.cards.Add(cancelledCard);
+        }
+    }
 
 }

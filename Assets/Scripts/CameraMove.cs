@@ -39,19 +39,20 @@ public class CameraMove : MonoBehaviour
 
     void Update()
     {
-        // 获取输入
+        //// 获取输入
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
         // 检查是否有输入
         if (moveX != 0f || moveY != 0f)
         {
-            // 计算移动量
+            Debug.Log(1);
+          // 计算移动量
             currentOffset += new Vector3(moveX, moveY, 0f) * moveSpeed * Time.deltaTime;
 
             // 根据初始offset计算动态边界
-            currentOffset.x = Mathf.Clamp(currentOffset.x, initialOffset.x - offsetLimit, initialOffset.x + offsetLimit);
-            currentOffset.y = Mathf.Clamp(currentOffset.y, initialOffset.y - offsetLimit, initialOffset.y + offsetLimit);
+           currentOffset.x = Mathf.Clamp(currentOffset.x, initialOffset.x - offsetLimit, initialOffset.x + offsetLimit);
+           currentOffset.y = Mathf.Clamp(currentOffset.y, initialOffset.y - offsetLimit, initialOffset.y + offsetLimit);
         }
         else
         {

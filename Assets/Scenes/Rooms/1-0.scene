@@ -3276,7 +3276,7 @@ MonoBehaviour:
   cards: []
   drawAnimationDuration: 0.5
   tweenCardReturn: 1
-  startingHandSize: 6
+  startingHandSize: 7
   isDraging: 0
 --- !u!1 &1088234027
 GameObject:
@@ -6587,6 +6587,8 @@ MonoBehaviour:
   controller: {fileID: 1395769815}
   grid: []
   currentPlayerGrid: {fileID: 0}
+  isWaitingForGridClick: 0
+  waitingCard: {fileID: 0}
 --- !u!4 &2058402606
 Transform:
   m_ObjectHideFlags: 0

@@ -1,7 +1,8 @@
 using DG.Tweening;   // 别忘了引入 DOTween 命名空间
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections;
+using UnityEngine.UI;
 public class GameGrid : MonoBehaviour
 {
     public Vector2Int gridPos;
@@ -91,15 +92,25 @@ public class GameGrid : MonoBehaviour
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
+        if (occupiedPlayer != null) // 切换角色
+        { 
+            TurnManager.instance.ChangePlayer(occupiedPlayer); 
+        }
+        NormalGridClick();
+    }
+
+    void NormalGridClick()
+    {
         UnitController playerController = IsoGrid2D.instance.controller.GetComponent<UnitController>();
 
-        if (isInRange) // 移动
+        if (isInRange)
         {
             playerController.MoveToGrid(this);
+            IsoGrid2D.instance.ResetWaiting();
             return;
         }
 
-        if (isAttackTarget) // 攻击
+        if (isAttackTarget)
         {
             if (playerController.isNextAttackDizziness)
             {
@@ -117,22 +128,20 @@ public class GameGrid : MonoBehaviour
                 playerController.Attack(this);
                 currentEnemy.BePulled(playerController.currentGridPos, playerController.PullDistance);
                 playerController.PullDistance = 0;
-                playerController.isNextAttackPull = false; 
+                playerController.isNextAttackPull = false;
             }
             else
             {
                 playerController.Attack(this);
             }
 
-            IsoGrid2D.instance.ClearHighlight();
-            return;
-        }
-
-        if (occupiedPlayer != null) // 切换角色
-        {
-            TurnManager.instance.ChangePlayer(occupiedPlayer);
+            FindAnyObjectByType<HorizontalCardHolder>().DrawCardAndUpdate();
+            IsoGrid2D.instance.ResetWaiting();
         }
     }
+
+    
+
 
 
     private IEnumerator AttackMultiple()

@@ -233,15 +233,17 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                     if (hasTarget)
                     {
                         // TODO: 在 HighlightAttackRange 里找到目标后，对敌人调用 TakeDamage(data.amount)
-                        playerUnit.attackDamage = data.amount;
+                        playerUnit.attackDamage = data.amount*playerUnit.meleeMultiplier;
                         
                         if (data.attackAttribute == CardData.AttackAttribute.MultipleDamage)
                         {
                             playerUnit.isNextAttackMultiple = true;
                             playerUnit.SegmentCount = data.SegmentCount;
                         }
+                        IsoGrid2D.instance.isWaitingForGridClick = true;
+                        IsoGrid2D.instance.waitingCard = this;
                         effectExecuted = true;
-                        Debug.Log($"近战攻击，造成 {data.amount} 点伤害！");
+                        Debug.Log($"近战攻击，造成 {playerUnit.attackDamage} 点伤害！");
                     }
                 }
                 break;
@@ -254,14 +256,17 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                     if (hasRangedTarget)
                     {
                         // TODO: 在 HighlightRangedAttackRange 里找到目标后，对敌人调用 TakeDamage(data.amount)
-                        playerUnit.attackDamage = data.amount;
+                        playerUnit.attackDamage = data.amount*playerUnit.rangedMultiplier;
                         if(data.attackAttribute == CardData.AttackAttribute.Dizziness)
                         {
                             playerUnit.isNextAttackDizziness = true;
                         }
-                        
+
+                        IsoGrid2D.instance.isWaitingForGridClick = true;
+                        IsoGrid2D.instance.waitingCard = this;
                         effectExecuted = true;
-                        Debug.Log($"远程攻击（{data.attackAttribute}），造成 {data.amount} 点伤害！");
+
+                        Debug.Log($"远程攻击（{data.attackAttribute}），造成 {playerUnit.attackDamage} 点伤害！");
                     }
                 }
                 break;
@@ -280,7 +285,10 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                             playerUnit.PullDistance = data.PullDistance;
                             playerUnit.isNextAttackPull = true;
                         }
+                        IsoGrid2D.instance.isWaitingForGridClick = true;
+                        IsoGrid2D.instance.waitingCard = this;
                         effectExecuted = true;
+                        Debug.Log($"远程攻击（{data.attackAttribute}），造成 {playerUnit.attackDamage} 点伤害！");
                     }
                 }
                 break;
@@ -288,6 +296,7 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                 if(playerUnit.currentHealth < playerUnit.maxHealth)
                 {
                     playerUnit.Heal(data.amount); // 使用卡牌定义的治疗数值
+                    FindAnyObjectByType<HorizontalCardHolder>().DrawCardAndUpdate();
                     effectExecuted = true;
                     Debug.Log($"治疗 {data.amount} 点生命值！");
                 }
@@ -295,17 +304,20 @@ public class Card : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHand
                 break;
             case CardData.CardEffectType.Bloodsucking:
                 playerUnit.SetNextAttackBloodSuck();
+                FindAnyObjectByType<HorizontalCardHolder>().DrawCardAndUpdate();
                 effectExecuted = true;
                 Debug.Log("BloodSuck");
                 break;
             case CardData.CardEffectType.Shield:
                 
                 playerUnit.AddShield(data.amount); // 使用卡牌定义的治疗数值
+                FindAnyObjectByType<HorizontalCardHolder>().DrawCardAndUpdate();
                 effectExecuted = true;
                 Debug.Log($"获得 {data.amount} 点护盾！");
                 break;
             case CardData.CardEffectType.Switch:
                 PlayerSwitchManager.instance.StartChooseSwitch();
+                FindAnyObjectByType<HorizontalCardHolder>().DrawCardAndUpdate();
                 effectExecuted = true;
                 Debug.Log($"切换");
                 break;
